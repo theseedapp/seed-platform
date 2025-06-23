@@ -1,0 +1,798 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed</title>
+    
+    <!-- PWA and Favicon Links -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="https://i.imgur.com/g9J1Y1Q.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/g9J1Y1Q.png">
+
+    <!-- Tailwind CSS & Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom color theme based on user request */
+        :root {
+            --primary-bg: #34403a;
+            --secondary-bg: #285238;
+            --accent-1: #94a37c;
+            --accent-2: #cacb9e;
+            --primary-text: #fff3bf;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Basic component styling */
+        .modal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background-color: var(--secondary-bg);
+            z-index: 1001;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+            display: flex; /* Added for footer positioning */
+            flex-direction: column; /* Added for footer positioning */
+        }
+        .side-menu.open {
+            left: 0;
+        }
+        .side-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: none;
+        }
+        .side-menu-overlay.active {
+            display: block;
+        }
+
+        /* Custom input styles */
+        .form-input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            box-sizing: border-box;
+            background-color: #cacb9e; /* --accent-2 */
+            color: #34403A; /* Explicitly set as requested */
+            border: 1px solid #94a37c; /* --accent-1 */
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem; /* Generous padding */
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #94a37c; /* --accent-1 */
+        }
+        
+        .form-input::placeholder {
+            color: var(--accent-1); /* --accent-1 */
+            opacity: 1;
+            font-weight: 400;
+        }
+        
+        /* Specific styles for the select element's placeholder */
+        select.form-input:invalid {
+           color: var(--accent-1); /* Placeholder color */
+           font-weight: 400;
+        }
+        
+        select.form-input {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2334403A' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 3.5rem;
+        }
+        
+        /* Loading spinner */
+        .loader {
+            border: 5px solid var(--accent-2);
+            border-top: 5px solid var(--accent-1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        main {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- App Loader/Spinner -->
+    <div id="loader-modal" class="modal hidden">
+        <div class="loader"></div>
+    </div>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home">
+            <!-- ... other home content ... -->
+            <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+            </div>
+            <!-- ... rest of home content ... -->
+        </section>
+        <!-- Setup Modal -->
+        <div id="setup-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="text-center mb-6">
+                     <img src="../assets/images/screenshots/IMG_0770.png" alt="Logo" class="h-16 mx-auto mb-4">
+                     <h2 class="text-2xl font-bold">Create a Memorization Plan</h2>
+                     <p class="text-sm opacity-80">Select a passage to begin</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="passage-select" class="block mb-1 text-sm font-medium">Passage</label>
+                        <select id="passage-select" class="form-input" required>
+                            <option value="" disabled selected>Select a Passage</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    <!-- Verse Range Inputs - Hidden by default -->
+                    <div id="verse-range-container" class="grid grid-cols-2 gap-4 hidden">
+                        <div>
+                           <label for="start-verse-select" class="block mb-1 text-sm font-medium">Start Verse</label>
+                           <select id="start-verse-select" class="form-input"></select>
+                        </div>
+                        <div>
+                           <label for="end-verse-select" class="block mb-1 text-sm font-medium">End Verse</label>
+                           <select id="end-verse-select" class="form-input"></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="target-date-input" class="block mb-1 text-sm font-medium">Target Date</label>
+                        <input type="date" id="target-date-input" class="form-input">
+                    </div>
+                     <button id="start-plan-button" class="w-full font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-200" style="background-color: var(--accent-1); color: var(--primary-bg);">Start Memorizing!</button>
+                     <p id="setup-error" class="text-red-400 text-sm text-center h-4"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Application Container (hidden by default) -->
+        <div id="app-container" class="container mx-auto p-4 md:p-6 max-w-4xl flex-col hidden">
+            
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-6 pb-4 border-b" style="border-color: var(--secondary-bg);">
+                <button id="menu-button" class="flex-shrink-0">
+                    <img src="https://i.imgur.com/eF4vmiG.png" alt="Seed Logo" class="h-8 rounded-md">
+                </button>
+                <h1 id="passage-title" class="flex-grow text-xl md:text-2xl font-bold text-right mx-4"></h1>
+            </header>
+
+            <!-- Progress Section -->
+            <section class="mb-6 p-4 rounded-lg shadow-lg" style="background-color: var(--secondary-bg);">
+                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-center">
+                    <div>
+                        <p class="text-sm font-medium opacity-80">Memorized</p>
+                        <p id="verses-memorized" class="text-2xl font-bold">0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium opacity-80">Complete</p>
+                        <p id="percent-complete" class="text-2xl font-bold">0%</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium opacity-80">Days Left</p>
+                        <p id="days-remaining" class="text-2xl font-bold">0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium opacity-80">Target Date</p>
+                        <p id="target-date-display" class="text-2xl font-bold">-</p>
+                    </div>
+                </div>
+                <div class="w-full rounded-full h-3" style="background-color: var(--primary-bg);">
+                    <div id="progress-bar" class="h-3 rounded-full" style="background-color: var(--accent-1); width: 0%; transition: width 0.5s ease;"></div>
+                </div>
+                <p id="progress-message" class="mt-3 text-center text-sm opacity-90"></p>
+            </section>
+
+            <!-- Verse Display Sections -->
+            <section class="p-4 rounded-lg shadow-lg mb-6" style="background-color: var(--secondary-bg);">
+                <h2 class="text-xl font-bold mb-4">Today's Verses</h2>
+                <div id="todays-verses-display" class="space-y-4 text-base md:text-lg leading-relaxed"></div>
+                 <div class="flex justify-center mt-6">
+                    <button id="mark-complete-button" class="font-bold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 text-lg hidden" style="background-color: var(--accent-1); color: var(--primary-bg);">Mark Today Complete</button>
+                </div>
+            </section>
+            
+            <section id="continued-reading-section" class="p-4 rounded-lg shadow-lg mb-6 hidden" style="background-color: var(--secondary-bg);">
+                <h2 class="text-xl font-bold mb-4">Continued Reading</h2>
+                <div id="continued-reading-display" class="space-y-4 text-base md:text-lg leading-relaxed opacity-70"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Side Menu -->
+    <div id="side-menu-overlay" class="side-menu-overlay"></div>
+    <div id="side-menu" class="side-menu p-4">
+        <div class="flex-grow">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold">Menu</h2>
+                <button id="side-menu-close-button" class="text-2xl">&times;</button>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="../index.html" class="block w-full text-left p-2 rounded hover:bg-gray-700/50">Go To Home Page</a></li>
+                <li><button id="share-plan-btn" class="w-full text-left p-2 rounded hover:bg-gray-700/50">Share My Plan</button></li>
+                <li><button id="share-app-btn" class="w-full text-left p-2 rounded hover:bg-gray-700/50">Share The App</button></li>
+                <li><button id="reset-plan-btn" class="w-full text-left p-2 rounded font-semibold" style="background-color: #cacb9e; color: #34403a;">Reset Plan</button></li>
+                <li><button id="faq-btn" class="w-full text-left p-2 rounded hover:bg-gray-700/50">FAQ</button></li>
+                <li><a href="mailto:the.seed.app@gmail.com" class="block w-full text-left p-2 rounded hover:bg-gray-700/50">Contact</a></li>
+                <li><button id="check-for-updates-btn" class="w-full text-left p-2 rounded hover:bg-gray-700/50">Check for Updates</button></li>
+            </ul>
+        </div>
+        <div class="p-4 text-center text-xs" style="color: var(--primary-text); opacity: 0.7;">
+            <p>Created for the benefit of your soul by NewJourneyDesigns v2.3</p>
+        </div>
+    </div>
+
+    <!-- First Time Install Hint Modal -->
+    <div id="install-hint-modal" class="modal hidden">
+        <div class="modal-content text-center">
+            <h2 class="text-xl font-bold mb-4">Welcome to Seed!</h2>
+            <p class="mb-4">For the best experience, add this app to your Home Screen to use it like a native app.</p>
+            <div class="text-sm text-left my-4">
+           		<p>
+  					<span class="font-bold">iPhone/iPad:</span> Tap the 'Share' icon 
+  						<svg xmlns="http://www.w3.org/2000/svg" 
+       						viewBox="0 0 24 24" 
+      						 width="18" height="18" 
+      						 style="display:inline; vertical-align:middle; margin: 0 4px;">
+   							 <path fill="currentColor" d="M12 2c.55 0 1 .45 1 1v10.59l3.3-3.3c.39-.39 1.03-.39 1.42 0s.39 1.03 0 1.42l-5 5c-.39.39-1.03.39-1.42 0l-5-5a.996.996 0 111.42-1.42l3.3 3.3V3c0-.55.45-1 1-1z"/>
+   							 <path fill="currentColor" d="M5 18c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-4h2v4c0 1.65-1.35 3-3 3H6c-1.65 0-3-1.35-3-3v-4h2v4z"/>
+ 					 </svg> 
+  					in Safari, then scroll down and tap 'Add to Home Screen'.
+				</p>
+            </div>
+            <button id="close-install-hint-btn" class="font-bold py-2 px-6 rounded-lg" style="background-color: var(--accent-1); color: var(--primary-bg);">Got it!</button>
+        </div>
+    </div>
+    
+    <!-- FAQ Modal -->
+    <div id="faq-modal" class="modal hidden">
+        <div class="modal-content max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Frequently Asked Questions</h2>
+                <button id="faq-close-btn" class="text-3xl font-bold">&times;</button>
+            </div>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <h3 class="font-bold text-lg">How do I add this app to my Home Screen?</h3>
+                    <p class="opacity-80"><span class="font-bold">iPhone/iPad:</span> Tap the 'Share' button in Safari, then scroll down and tap 'Add to Home Screen'.</p>
+                    <p class="opacity-80 mt-1"><span class="font-bold">Android:</span> Tap the three-dot menu in Chrome, then tap 'Install app' or 'Add to Home screen'.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">How does the plan work?</h3>
+                    <p class="opacity-80">The app calculates the number of verses you need to memorize each day to reach your target date. The "Today's Verses" section shows verses you've already completed (in gray) plus the new verses for the current day (highlighted).</p>
+                </div>
+                 <div>
+                    <h3 class="font-bold text-lg">How do I mark progress?</h3>
+                    <p class="opacity-80">Click the "Mark Today Complete" button at the bottom of the "Today's Verses" section. This will move your progress forward and highlight the next set of verses for the following day.</p>
+                </div>
+                 <div>
+                    <h3 class="font-bold text-lg">How do I share a plan?</h3>
+                    <p class="opacity-80">Open the menu and click "Share Plan." This will copy a special link to your clipboard. When someone opens this link, the passage you are memorizing will be pre-selected for them, and they just need to choose their own target date.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Can I select a part of a chapter?</h3>
+                    <p class="opacity-80">Yes. If you select a passage that is a full chapter (like "Romans 8"), dropdowns will appear allowing you to select a specific start and end verse for your plan.</p>
+                </div>
+                 <div>
+                    <h3 class="font-bold text-lg">How do I reset my plan?</h3>
+                    <p class="opacity-80">Open the menu and click "Reset Plan." This will completely clear your current progress and passage selection, allowing you to start a new plan from scratch.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer style="font-size: 0.8rem; margin-top: 2rem; text-align: center; padding: 1rem; color: var(--primary-text); opacity: 0.6;">
+        <p>Scripture quotations taken from the Holy Bible, New International Version®, NIV®.</p>
+        <p>Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.</p>
+   </footer>
+    
+    <script type="module">
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registered.', reg))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+
+        // DOM Elements
+        const setupModal = document.getElementById('setup-modal');
+        const appContainer = document.getElementById('app-container');
+        const loaderModal = document.getElementById('loader-modal');
+        const passageSelect = document.getElementById('passage-select');
+        const targetDateInput = document.getElementById('target-date-input');
+        const startPlanButton = document.getElementById('start-plan-button');
+        const setupError = document.getElementById('setup-error');
+        const passageTitle = document.getElementById('passage-title');
+        const versesMemorizedSpan = document.getElementById('verses-memorized');
+        const percentCompleteSpan = document.getElementById('percent-complete');
+        const daysRemainingSpan = document.getElementById('days-remaining');
+        const targetDateDisplay = document.getElementById('target-date-display');
+        const progressBar = document.getElementById('progress-bar');
+        const progressMessage = document.getElementById('progress-message');
+        const todaysVersesDisplay = document.getElementById('todays-verses-display');
+        const continuedReadingSection = document.getElementById('continued-reading-section');
+        const continuedReadingDisplay = document.getElementById('continued-reading-display');
+        const markCompleteButton = document.getElementById('mark-complete-button');
+        const verseRangeContainer = document.getElementById('verse-range-container');
+        const startVerseSelect = document.getElementById('start-verse-select');
+        const endVerseSelect = document.getElementById('end-verse-select');
+        
+        // Menu Elements
+        const menuButton = document.getElementById('menu-button');
+        const sideMenu = document.getElementById('side-menu');
+        const sideMenuOverlay = document.getElementById('side-menu-overlay');
+        const sideMenuCloseButton = document.getElementById('side-menu-close-button');
+        const resetPlanBtn = document.getElementById('reset-plan-btn');
+        const sharePlanBtn = document.getElementById('share-plan-btn');
+        const shareAppBtn = document.getElementById('share-app-btn');
+        const faqBtn = document.getElementById('faq-btn');
+        const checkForUpdatesBtn = document.getElementById('check-for-updates-btn');
+        
+        // Modal Elements
+        const installHintModal = document.getElementById('install-hint-modal');
+        const closeInstallHintBtn = document.getElementById('close-install-hint-btn');
+        const faqModal = document.getElementById('faq-modal');
+        const faqCloseBtn = document.getElementById('faq-close-btn');
+
+        // App State
+        let plan = {};
+        
+        // --- Preloaded Scripture Data ---
+        // NOTE: This object now contains the FULL text for all passages.
+        const preloadedPassages = {
+            "Genesis 1:28": { name: "Genesis 1:28", translation: "AMPC", verses: [{ verse: 28, text: `And God blessed them and said to them, Be fruitful, multiply, and fill the earth, and subdue it [using all its vast resources in the service of God and man]; and have dominion over the fish of the sea, the birds of the air, and over every living creature that moves upon the earth.` }] },
+            "Psalm 23": { name: "Psalm 23", translation: "NIV84", verses: [{ verse: 1, text: `The LORD is my shepherd, I shall not be in want.` }, { verse: 2, text: `He makes me lie down in green pastures, he leads me beside quiet waters,` }, { verse: 3, text: `he restores my soul. He guides me in paths of righteousness for his name’s sake.` }, { verse: 4, text: `Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me.` }, { verse: 5, text: `You prepare a table before me in the presence of my enemies. You anoint my head with oil; my cup overflows.` }, { verse: 6, text: `Surely goodness and love will follow me all the days of my life, and I will dwell in the house of the LORD forever.` }] },
+            "Psalm 27:1-6": { name: "Psalm 27:1–6", translation: "NIV11", verses: [{ verse: 1, text: `The LORD is my light and my salvation— whom shall I fear? The LORD is the stronghold of my life— of whom shall I be afraid?` }, { verse: 2, text: `When the wicked advance against me to devour me, it is my enemies and my foes who will stumble and fall.` }, { verse: 3, text: `Though an army besiege me, my heart will not fear; though war break out against me, even then I will be confident.` }, { verse: 4, text: `One thing I ask from the LORD, this only do I seek: that I may dwell in the house of the LORD all the days of my life, to gaze on the beauty of the LORD and to seek him in his temple.` }, { verse: 5, text: `For in the day of trouble he will keep me safe in his dwelling; he will hide me in the shelter of his sacred tent and set me high upon a rock.` }, { verse: 6, text: `Then my head will be exalted above the enemies who surround me; at his sacred tent I will sacrifice with shouts of joy; I will sing and make music to the LORD.` }] },
+            "Psalm 103:1-13": { name: "Psalm 103:1–13", translation: "NIV11", verses: [{ verse: 1, text: `Praise the LORD, my soul; all my inmost being, praise his holy name.` }, { verse: 2, text: `Praise the LORD, my soul, and forget not all his benefits—` }, { verse: 3, text: `who forgives all your sins and heals all your diseases,` }, { verse: 4, text: `who redeems your life from the pit and crowns you with love and compassion,` }, { verse: 5, text: `who satisfies your desires with good things so that your youth is renewed like the eagle’s.` }, { verse: 6, text: `The LORD works righteousness and justice for all the oppressed.` }, { verse: 7, text: `He made known his ways to Moses, his deeds to the people of Israel:` }, { verse: 8, text: `The LORD is compassionate and gracious, slow to anger, abounding in love.` }, { verse: 9, text: `He will not always accuse, nor will he harbor his anger forever;` }, { verse: 10, text: `he does not treat us as our sins deserve or repay us according to our iniquities.` }, { verse: 11, text: `For as high as the heavens are above the earth, so great is his love for those who fear him;` }, { verse: 12, text: `as far as the east is from the west, so far has he removed our transgressions from us.` }, { verse: 13, text: `As a father has compassion on his children, so the LORD has compassion on those who fear him;` }] },
+            "Matthew 5-7": {
+                name: "Matthew 5–7",
+                translation: "NIV11",
+                isMultiChapter: true,
+                verses: [
+                    {"verse":1,"chapter":5,"text":`Now when Jesus saw the crowds, he went up on a mountainside and sat down. His disciples came to him,`},{"verse":2,"chapter":5,"text":`and he began to teach them.`},{"verse":3,"chapter":5,"text":`He said: “Blessed are the poor in spirit, for theirs is the kingdom of heaven.`},{"verse":4,"chapter":5,"text":`Blessed are those who mourn, for they will be comforted.`},{"verse":5,"chapter":5,"text":`Blessed are the meek, for they will inherit the earth.`},{"verse":6,"chapter":5,"text":`Blessed are those who hunger and thirst for righteousness, for they will be filled.`},{"verse":7,"chapter":5,"text":`Blessed are the merciful, for they will be shown mercy.`},{"verse":8,"chapter":5,"text":`Blessed are the pure in heart, for they will see God.`},{"verse":9,"chapter":5,"text":`Blessed are the peacemakers, for they will be called children of God.`},{"verse":10,"chapter":5,"text":`Blessed are those who are persecuted because of righteousness, for theirs is the kingdom of heaven.`},{"verse":11,"chapter":5,"text":`“Blessed are you when people insult you, persecute you and falsely say all kinds of evil against you because of me.`},{"verse":12,"chapter":5,"text":`Rejoice and be glad, because great is your reward in heaven, for in the same way they persecuted the prophets who were before you.`},{"verse":13,"chapter":5,"text":`“You are the salt of the earth. But if the salt loses its saltiness, how can it be made salty again? It is no longer good for anything, except to be thrown out and trampled underfoot.`},{"verse":14,"chapter":5,"text":`“You are the light of the world. A town built on a hill cannot be hidden.`},{"verse":15,"chapter":5,"text":`Neither do people light a lamp and put it under a bowl. Instead they put it on its stand, and it gives light to everyone in the house.`},{"verse":16,"chapter":5,"text":`In the same way, let your light shine before others, that they may see your good deeds and glorify your Father in heaven.`},{"verse":17,"chapter":5,"text":`“Do not think that I have come to abolish the Law or the Prophets; I have not come to abolish them but to fulfill them.`},{"verse":18,"chapter":5,"text":`For truly I tell you, until heaven and earth disappear, not the smallest letter, not the least stroke of a pen, will by any means disappear from the Law until everything is accomplished.`},{"verse":19,"chapter":5,"text":`Therefore anyone who sets aside one of the least of these commands and teaches others accordingly will be called least in the kingdom of heaven, but whoever practices and teaches these commands will be called great in the kingdom of heaven.`},{"verse":20,"chapter":5,"text":`For I tell you that unless your righteousness surpasses that of the Pharisees and the teachers of the law, you will certainly not enter the kingdom of heaven.`},{"verse":21,"chapter":5,"text":`“You have heard that it was said to the people long ago, ‘You shall not murder, and anyone who murders will be subject to judgment.’`},{"verse":22,"chapter":5,"text":`But I tell you that anyone who is angry with a brother or sister will be subject to judgment. Again, anyone who says to a brother or sister, ‘Raca,’ is answerable to the court. And anyone who says, ‘You fool!’ will be in danger of the fire of hell.`},{"verse":23,"chapter":5,"text":`“Therefore, if you are offering your gift at the altar and there remember that your brother or sister has something against you,`},{"verse":24,"chapter":5,"text":`leave your gift there in front of the altar. First go and be reconciled to them; then come and offer your gift.`},
+                    {"verse":25,"chapter":5,"text":`“Settle matters quickly with your adversary who is taking you to court. Do it while you are still together on the way, or your adversary may hand you over to the judge, and the judge may hand you over to the officer, and you may be thrown into prison.`},{"verse":26,"chapter":5,"text":`Truly I tell you, you will not get out until you have paid the last penny.`},{"verse":27,"chapter":5,"text":`“You have heard that it was said, ‘You shall not commit adultery.’`},{"verse":28,"chapter":5,"text":`But I tell you that anyone who looks at a woman lustfully has already committed adultery with her in his heart.`},{"verse":29,"chapter":5,"text":`If your right eye causes you to stumble, gouge it out and throw it away. It is better for you to lose one part of your body than for your whole body to be thrown into hell.`},{"verse":30,"chapter":5,"text":`And if your right hand causes you to stumble, cut it off and throw it away. It is better for you to lose one part of your body than for your whole body to go into hell.`},{"verse":31,"chapter":5,"text":`“It has been said, ‘Anyone who divorces his wife must give her a certificate of divorce.’`},{"verse":32,"chapter":5,"text":`But I tell you that anyone who divorces his wife, except for sexual immorality, makes her the victim of adultery, and anyone who marries a divorced woman commits adultery.`},{"verse":33,"chapter":5,"text":`“Again, you have heard that it was said to the people long ago, ‘Do not break your oath, but fulfill to the Lord the vows you have made.’`},{"verse":34,"chapter":5,"text":`But I tell you, do not swear an oath at all: either by heaven, for it is God’s throne;`},{"verse":35,"chapter":5,"text":`or by the earth, for it is his footstool; or by Jerusalem, for it is the city of the Great King.`},{"verse":36,"chapter":5,"text":`And do not swear by your head, for you cannot make even one hair white or black.`},{"verse":37,"chapter":5,"text":`All you need to say is simply ‘Yes’ or ‘No’; anything beyond this comes from the evil one.`},{"verse":38,"chapter":5,"text":`“You have heard that it was said, ‘Eye for eye, and tooth for tooth.’`},{"verse":39,"chapter":5,"text":`But I tell you, do not resist an evil person. If anyone slaps you on the right cheek, turn to them the other cheek also.`},{"verse":40,"chapter":5,"text":`And if anyone wants to sue you and take your shirt, hand over your coat as well.`},{"verse":41,"chapter":5,"text":`If anyone forces you to go one mile, go with them two miles.`},{"verse":42,"chapter":5,"text":`Give to the one who asks you, and do not turn away from the one who wants to borrow from you.`},
+                    {"verse":43,"chapter":5,"text":`“You have heard that it was said, ‘Love your neighbor and hate your enemy.’`},{"verse":44,"chapter":5,"text":`But I tell you, love your enemies and pray for those who persecute you,`},{"verse":45,"chapter":5,"text":`that you may be children of your Father in heaven. He causes his sun to rise on the evil and the good, and sends rain on the righteous and the unrighteous.`},{"verse":46,"chapter":5,"text":`If you love those who love you, what reward will you get? Are not even the tax collectors doing that?`},{"verse":47,"chapter":5,"text":`And if you greet only your own people, what are you doing more than others? Do not even pagans do that?`},{"verse":48,"chapter":5,"text":`Be perfect, therefore, as your heavenly Father is perfect.`},
+                    {"verse":1,"chapter":6,"text":`“Be careful not to practice your righteousness in front of others to be seen by them. If you do, you will have no reward from your Father in heaven.`},{"verse":2,"chapter":6,"text":`“So when you give to the needy, do not announce it with trumpets, as the hypocrites do in the synagogues and on the streets, to be honored by others. Truly I tell you, they have received their reward in full.`},{"verse":3,"chapter":6,"text":`But when you give to the needy, do not let your left hand know what your right hand is doing,`},{"verse":4,"chapter":6,"text":`so that your giving may be in secret. Then your Father, who sees what is done in secret, will reward you.`},{"verse":5,"chapter":6,"text":`“And when you pray, do not be like the hypocrites, for they love to pray standing in the synagogues and on the street corners to be seen by others. Truly I tell you, they have received their reward in full.`},{"verse":6,"chapter":6,"text":`But when you pray, go into your room, close the door and pray to your Father, who is unseen. Then your Father, who sees what is done in secret, will reward you.`},{"verse":7,"chapter":6,"text":`And when you pray, do not keep on babbling like pagans, for they think they will be heard because of their many words.`},{"verse":8,"chapter":6,"text":`Do not be like them, for your Father knows what you need before you ask him.`},{"verse":9,"chapter":6,"text":`“This, then, is how you should pray: “ ‘Our Father in heaven, hallowed be your name,`},{"verse":10,"chapter":6,"text":`your kingdom come, your will be done, on earth as it is in heaven.`},{"verse":11,"chapter":6,"text":`Give us today our daily bread.`},{"verse":12,"chapter":6,"text":`And forgive us our debts, as we also have forgiven our debtors.`},{"verse":13,"chapter":6,"text":`And lead us not into temptation, but deliver us from the evil one.’`},{"verse":14,"chapter":6,"text":`For if you forgive other people when they sin against you, your heavenly Father will also forgive you.`},{"verse":15,"chapter":6,"text":`But if you do not forgive others their sins, your Father will not forgive your sins.`},
+                    {"verse":16,"chapter":6,"text":`“When you fast, do not look somber as the hypocrites do, for they disfigure their faces to show others they are fasting. Truly I tell you, they have received their reward in full.`},{"verse":17,"chapter":6,"text":`But when you fast, put oil on your head and wash your face,`},{"verse":18,"chapter":6,"text":`so that it will not be obvious to others that you are fasting, but only to your Father, who is unseen; and your Father, who sees what is done in secret, will reward you.`},{"verse":19,"chapter":6,"text":`“Do not store up for yourselves treasures on earth, where moths and vermin destroy, and where thieves break in and steal.`},{"verse":20,"chapter":6,"text":`But store up for yourselves treasures in heaven, where moths and vermin do not destroy, and where thieves do not break in and steal.`},{"verse":21,"chapter":6,"text":`For where your treasure is, there your heart will be also.`},{"verse":22,"chapter":6,"text":`“The eye is the lamp of the body. If your eyes are healthy, your whole body will be full of light.`},{"verse":23,"chapter":6,"text":`But if your eyes are unhealthy, your whole body will be full of darkness. If then the light within you is darkness, how great is that darkness!`},{"verse":24,"chapter":6,"text":`“No one can serve two masters. Either you will hate the one and love the other, or you will be devoted to the one and despise the other. You cannot serve both God and money.`},{"verse":25,"chapter":6,"text":`“Therefore I tell you, do not worry about your life, what you will eat or drink; or about your body, what you will wear. Is not life more than food, and the body more than clothes?`},{"verse":26,"chapter":6,"text":`Look at the birds of the air; they do not sow or reap or store away in barns, and yet your heavenly Father feeds them. Are you not much more valuable than they?`},{"verse":27,"chapter":6,"text":`Can any one of you by worrying add a single hour to your life?`},{"verse":28,"chapter":6,"text":`“And why do you worry about clothes? See how the flowers of the field grow. They do not labor or spin.`},{"verse":29,"chapter":6,"text":`Yet I tell you that not even Solomon in all his splendor was dressed like one of these.`},
+                    {"verse":30,"chapter":6,"text":`If that is how God clothes the grass of the field, which is here today and tomorrow is thrown into the fire, will he not much more clothe you—you of little faith?`},{"verse":31,"chapter":6,"text":`So do not worry, saying, ‘What shall we eat?’ or ‘What shall we drink?’ or ‘What shall we wear?’`},{"verse":32,"chapter":6,"text":`For the pagans run after all these things, and your heavenly Father knows that you need them.`},{"verse":33,"chapter":6,"text":`But seek first his kingdom and his righteousness, and all these things will be given to you as well.`},{"verse":34,"chapter":6,"text":`Therefore do not worry about tomorrow, for tomorrow will worry about itself. Each day has enough trouble of its own.`},
+                    {"verse":1,"chapter":7,"text":`“Do not judge, or you too will be judged.`},{"verse":2,"chapter":7,"text":`For in the same way you judge others, you will be judged, and with the measure you use, it will be measured to you.`},{"verse":3,"chapter":7,"text":`“Why do you look at the speck of sawdust in your brother’s eye and pay no attention to the plank in your own eye?`},{"verse":4,"chapter":7,"text":`How can you say to your brother, ‘Let me take the speck out of your eye,’ when all the time there is a plank in your own eye?`},{"verse":5,"chapter":7,"text":`You hypocrite, first take the plank out of your own eye, and then you will see clearly to remove the speck from your brother’s eye.`},{"verse":6,"chapter":7,"text":`“Do not give dogs what is sacred; do not throw your pearls to pigs. If you do, they may trample them under their feet, and turn and tear you to pieces.`},{"verse":7,"chapter":7,"text":`“Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.`},{"verse":8,"chapter":7,"text":`For everyone who asks receives; the one who seeks finds; and to the one who knocks, the door will be opened.`},{"verse":9,"chapter":7,"text":`“Which of you, if your son asks for bread, will give him a stone?`},{"verse":10,"chapter":7,"text":`Or if he asks for a fish, will give him a snake?`},{"verse":11,"chapter":7,"text":`If you, then, though you are evil, know how to give good gifts to your children, how much more will your Father in heaven give good gifts to those who ask him!`},{"verse":12,"chapter":7,"text":`So in everything, do to others what you would have them do to you, for this sums up the Law and the Prophets.`},{"verse":13,"chapter":7,"text":`“Enter through the narrow gate. For wide is the gate and broad is the road that leads to destruction, and many enter through it.`},{"verse":14,"chapter":7,"text":`But small is the gate and narrow the road that leads to life, and only a few find it.`},{"verse":15,"chapter":7,"text":`“Watch out for false prophets. They come to you in sheep’s clothing, but inwardly they are ferocious wolves.`},
+                    {"verse":16,"chapter":7,"text":`By their fruit you will recognize them. Do people pick grapes from thornbushes, or figs from thistles?`},{"verse":17,"chapter":7,"text":`Likewise, every good tree bears good fruit, but a bad tree bears good fruit.`},{"verse":18,"chapter":7,"text":`A good tree cannot bear bad fruit, and a bad tree cannot bear good fruit.`},{"verse":19,"chapter":7,"text":`Every tree that does not bear good fruit is cut down and thrown into the fire.`},{"verse":20,"chapter":7,"text":`Thus, by their fruit you will recognize them.`},{"verse":21,"chapter":7,"text":`“Not everyone who says to me, ‘Lord, Lord,’ will enter the kingdom of heaven, but only the one who does the will of my Father who is in heaven.`},{"verse":22,"chapter":7,"text":`Many will say to me on that day, ‘Lord, Lord, did we not prophesy in your name and in your name drive out demons and in your name perform many miracles?’`},{"verse":23,"chapter":7,"text":`Then I will tell them plainly, ‘I never knew you. Away from me, you evildoers!’`},{"verse":24,"chapter":7,"text":`“Therefore everyone who hears these words of mine and puts them into practice is like a wise man who built his house on the rock.`},{"verse":25,"chapter":7,"text":`The rain came down, the streams rose, and the winds blew and beat against that house; yet it did not fall, because it had its foundation on the rock.`},{"verse":26,"chapter":7,"text":`But everyone who hears these words of mine and does not put them into practice is like a foolish man who built his house on sand.`},{"verse":27,"chapter":7,"text":`The rain came down, the streams rose, and the winds blew and beat against that house, and it fell with a great crash.”`},{"verse":28,"chapter":7,"text":`When Jesus had finished saying these things, the crowds were amazed at his teaching,`},{"verse":29,"chapter":7,"text":`because he taught as one who had authority, and not as their teachers of the law.`}
+                ]
+            },
+            "Matthew 28:18-20":{name:"Matthew 28:18–20",translation:"NIV11",verses:[{"verse":18,"text":`Then Jesus came to them and said, “All authority in heaven and on earth has been given to me.`},{"verse":19,"text":`Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit,`},{"verse":20,"text":`and teaching them to obey everything I have commanded you. And surely I am with you always, to the very end of the age.”`}]},
+            "John 15:1-17":{name:"John 15:1–17",translation:"NIV84",verses:[{"verse":1,"text":`“I am the true vine, and my Father is the gardener.`},{"verse":2,"text":`He cuts off every branch in me that bears no fruit, while every branch that does bear fruit he prunes so that it will be even more fruitful.`},{"verse":3,"text":`You are already clean because of the word I have spoken to you.`},{"verse":4,"text":`Remain in me, and I will remain in you. No branch can bear fruit by itself; it must remain in the vine. Neither can you bear fruit unless you remain in me.`},{"verse":5,"text":`“I am the vine; you are the branches. If a man remains in me and I in him, he will bear much fruit; apart from me you can do nothing.`},{"verse":6,"text":`If anyone does not remain in me, he is like a branch that is thrown away and withers; such branches are picked up, thrown into the fire and burned.`},{"verse":7,"text":`If you remain in me and my words remain in you, ask whatever you wish, and it will be given you.`},{"verse":8,"text":`This is to my Father’s glory, that you bear much fruit, showing yourselves to be my disciples.`},{"verse":9,"text":`“As the Father has loved me, so have I loved you. Now remain in my love.`},{"verse":10,"text":`If you obey my commands, you will remain in my love, just as I have obeyed my Father’s commands and remain in his love.`},{"verse":11,"text":`I have told you this so that my joy may be in you and that your joy may be complete.`},{"verse":12,"text":`My command is this: Love each other as I have loved you.`},{"verse":13,"text":`Greater love has no one than this, that he lay down his life for his friends.`},{"verse":14,"text":`You are my friends if you do what I command.`},{"verse":15,"text":`I no longer call you servants, because a servant does not know his master’s business. Instead, I have called you friends, for everything that I learned from my Father I have made known to you.`},{"verse":16,"text":`You did not choose me, but I chose you and appointed you to go and bear fruit—fruit that will last. Then the Father will give you whatever you ask in my name.`},{"verse":17,"text":`This is my command: Love each other.`}]},
+            "John 17:20-26":{name:"John 17:20–26",translation:"NIV11",verses:[{"verse":20,"text":`“My prayer is not for them alone. I pray also for those who will believe in me through their message,`},{"verse":21,"text":`that all of them may be one, Father, just as you are in me and I am in you. May they also be in us so that the world may believe that you have sent me.`},{"verse":22,"text":`I have given them the glory that you gave me, that they may be one as we are one:`},{"verse":23,"text":`I in them and you in me—so that they may be brought to complete unity. Then the world will know that you sent me and have loved them even as you have loved me.`},{"verse":24,"text":`“Father, I want those you have given me to be with me where I am, and to see my glory, the glory you have given me because you loved me before the creation of the world.`},{"verse":25,"text":`“Righteous Father, though the world does not know you, I know you, and they know that you have sent me.`},{"verse":26,"text":`I have made you known to them, and will continue to make you known in order that the love you have for me may be in them and that I myself may be in them.”`}]},
+            "Romans 8":{name:"Romans 8",translation:"NIV11",verses:[{"verse":1,"text":`Therefore, there is now no condemnation for those who are in Christ Jesus,`},{"verse":2,"text":`because through Christ Jesus the law of the Spirit who gives life has set you free from the law of sin and death.`},{"verse":3,"text":`For what the law was powerless to do because it was weakened by the flesh, God did by sending his own Son in the likeness of sinful flesh to be a sin offering. And so he condemned sin in the flesh,`},{"verse":4,"text":`in order that the righteous requirement of the law might be fully met in us, who do not live according to the flesh but according to the Spirit.`},{"verse":5,"text":`Those who live according to the flesh have their minds set on what the flesh desires; but those who live in accordance with the Spirit have their minds set on what the Spirit desires.`},{"verse":6,"text":`The mind governed by the flesh is death, but the mind governed by the Spirit is life and peace.`},{"verse":7,"text":`The mind governed by the flesh is hostile to God; it does not submit to God’s law, nor can it do so.`},{"verse":8,"text":`Those who are in the realm of the flesh cannot please God.`},{"verse":9,"text":`You, however, are not in the realm of the flesh but are in the realm of the Spirit, if indeed the Spirit of God lives in you. And if anyone does not have the Spirit of Christ, they do not belong to Christ.`},{"verse":10,"text":`But if Christ is in you, then even though your body is subject to death because of sin, the Spirit gives life because of righteousness.`},{"verse":11,"text":`And if the Spirit of him who raised Jesus from the dead is living in you, he who raised Christ from the dead will also give life to your mortal bodies because of his Spirit who lives in you.`},{"verse":12,"text":`Therefore, brothers and sisters, we have an obligation—but it is not to the flesh, to live according to it.`},{"verse":13,"text":`For if you live according to the flesh, you will die; but if by the Spirit you put to death the misdeeds of the body, you will live.`},{"verse":14,"text":`For those who are led by the Spirit of God are the children of God.`},{"verse":15,"text":`The Spirit you received does not make you slaves, so that you live in fear again; rather, the Spirit you received brought about your adoption to sonship. And by him we cry, “Abba, Father.”`},{"verse":16,"text":`The Spirit himself testifies with our spirit that we are God’s children.`},{"verse":17,"text":`Now if we are children, then we are heirs—heirs of God and co-heirs with Christ, if indeed we share in his sufferings in order that we may also share in his glory.`},{"verse":18,"text":`I consider that our present sufferings are not worth comparing with the glory that will be revealed in us.`},{"verse":19,"text":`For the creation waits in eager expectation for the children of God to be revealed.`},{"verse":20,"text":`For the creation was subjected to frustration, not by its own choice, but by the will of the one who subjected it, in hope`},{"verse":21,"text":`that the creation itself will be liberated from its bondage to decay and brought into the freedom and glory of the children of God.`},{"verse":22,"text":`We know that the whole creation has been groaning as in the pains of childbirth right up to the present time.`},{"verse":23,"text":`Not only so, but we ourselves, who have the firstfruits of the Spirit, groan inwardly as we wait eagerly for our adoption to sonship, the redemption of our bodies.`},{"verse":24,"text":`For in this hope we were saved. But hope that is seen is no hope at all. Who hopes for what they already have?`},{"verse":25,"text":`But if we hope for what we do not yet have, we wait for it patiently.`},{"verse":26,"text":`In the same way, the Spirit helps us in our weakness. We do not know what we ought to pray for, but the Spirit himself intercedes for us through wordless groans.`},{"verse":27,"text":`And he who searches our hearts knows the mind of the Spirit, because the Spirit intercedes for God’s people in accordance with the will of God.`},{"verse":28,"text":`And we know that in all things God works for the good of those who love him, who have been called according to his purpose.`},{"verse":29,"text":`For those God foreknew he also predestined to be conformed to the image of his Son, that he might be the firstborn among many brothers and sisters.`},{"verse":30,"text":`And those he predestined, he also called; those he called, he also justified; those he justified, he also glorified.`},{"verse":31,"text":`What, then, shall we say in response to these things? If God is for us, who can be against us?`},{"verse":32,"text":`He who did not spare his own Son, but gave him up for us all—how will he not also, along with him, graciously give us all things?`},{"verse":33,"text":`Who will bring any charge against those whom God has chosen? It is God who justifies.`},{"verse":34,"text":`Who then is the one who condemns? No one. Christ Jesus who died—more than that, who was raised to life—is at the right hand of God and is also interceding for us.`},{"verse":35,"text":`Who shall separate us from the love of Christ? Shall trouble or hardship or persecution or famine or nakedness or danger or sword?`},{"verse":36,"text":`As it is written: “For your sake we face death all day long; we are considered as sheep to be slaughtered.”`},{"verse":37,"text":`No, in all these things we are more than conquerors through him who loved us.`},{"verse":38,"text":`For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers,`},{"verse":39,"text":`neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.`}]},
+            "Romans 12":{name:"Romans 12",translation:"NIV11",verses:[{"verse":1,"text":`Therefore, I urge you, brothers and sisters, in view of God’s mercy, to offer your bodies as a living sacrifice, holy and pleasing to God—this is your true and proper worship.`},{"verse":2,"text":`Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will.`},{"verse":3,"text":`For by the grace given me I say to every one of you: Do not think of yourself more highly than you ought, but rather think of yourself with sober judgment, in accordance with the faith God has distributed to each of you.`},{"verse":4,"text":`For just as each of us has one body with many members, and these members do not all have the same function,`},{"verse":5,"text":`so in Christ we, though many, form one body, and each member belongs to all the others.`},{"verse":6,"text":`We have different gifts, according to the grace given to each of us. If your gift is prophesying, then prophesy in accordance with your faith;`},{"verse":7,"text":`if it is serving, then serve; if it is teaching, then teach;`},{"verse":8,"text":`if it is to encourage, then give encouragement; if it is giving, then give generously; if it is to lead, do it diligently; if it is to show mercy, do it cheerfully.`},{"verse":9,"text":`Love must be sincere. Hate what is evil; cling to what is good.`},{"verse":10,"text":`Be devoted to one another in love. Honor one another above yourselves.`},{"verse":11,"text":`Never be lacking in zeal, but keep your spiritual fervor, serving the Lord.`},{"verse":12,"text":`Be joyful in hope, patient in affliction, faithful in prayer.`},{"verse":13,"text":`Share with the Lord’s people who are in need. Practice hospitality.`},{"verse":14,"text":`Bless those who persecute you; bless and do not curse.`},{"verse":15,"text":`Rejoice with those who rejoice; mourn with those who mourn.`},{"verse":16,"text":`Live in harmony with one another. Do not be proud, but be willing to associate with people of low position. Do not be conceited.`},{"verse":17,"text":`Do not repay anyone evil for evil. Be careful to do what is right in the eyes of everyone.`},{"verse":18,"text":`If it is possible, as far as it depends on you, live at peace with everyone.`},{"verse":19,"text":`Do not take revenge, my dear friends, but leave room for God’s wrath, for it is written: “It is mine to avenge; I will repay,” says the Lord.`},{"verse":20,"text":`On the contrary: “If your enemy is hungry, feed him; if he is thirsty, give him something to drink. In doing this, you will heap burning coals on his head.”`},{"verse":21,"text":`Do not be overcome by evil, but overcome evil with good.`}]},
+            "1 Corinthians 13":{name:"1 Corinthians 13",translation:"NIV84",verses:[{"verse":1,"text":`If I speak in the tongues of men and of angels, but have not love, I am only a resounding gong or a clanging cymbal.`},{"verse":2,"text":`If I have the gift of prophecy and can fathom all mysteries and all knowledge, and if I have a faith that can move mountains, but have not love, I am nothing.`},{"verse":3,"text":`If I give all I possess to the poor and surrender my body to the flames, but have not love, I gain nothing.`},{"verse":4,"text":`Love is patient, love is kind. It does not envy, it does not boast, it is not proud.`},{"verse":5,"text":`It is not rude, it is not self-seeking, it is not easily angered, it keeps no record of wrongs.`},{"verse":6,"text":`Love does not delight in evil but rejoices with the truth.`},{"verse":7,"text":`It always protects, always trusts, always hopes, always perseveres.`},{"verse":8,"text":`Love never fails. But where there are prophecies, they will cease; where there are tongues, they will be stilled; where there is knowledge, it will pass away.`},{"verse":9,"text":`For we know in part and we prophesy in part,`},{"verse":10,"text":`but when perfection comes, the imperfect disappears.`},{"verse":11,"text":`When I was a child, I talked like a child, I thought like a child, I reasoned like a child. When I became a man, I put childish ways behind me.`},{"verse":12,"text":`Now we see but a poor reflection as in a mirror; then we shall see face to face. Now I know in part; then I shall know fully, even as I am fully known.`},{"verse":13,"text":`And now these three remain: faith, hope and love. But the greatest of these is love.`}]},
+            "2 Corinthians 4:7-18":{name:"2 Corinthians 4:7–18",translation:"NIV11",verses:[{"verse":7,"text":`But we have this treasure in jars of clay to show that this all-surpassing power is from God and not from us.`},{"verse":8,"text":`We are hard pressed on every side, but not crushed; perplexed, but not in despair;`},{"verse":9,"text":`persecuted, but not abandoned; struck down, but not destroyed.`},{"verse":10,"text":`We always carry around in our body the death of Jesus, so that the life of Jesus may also be revealed in our body.`},{"verse":11,"text":`For we who are alive are always being given over to death for Jesus’ sake, so that his life may also be revealed in our mortal body.`},{"verse":12,"text":`So then, death is at work in us, but life is at work in you.`},{"verse":13,"text":`It is written: “I believed; therefore I have spoken.” Since we have that same spirit of faith, we also believe and therefore speak,`},{"verse":14,"text":`because we know that the one who raised the Lord Jesus from the dead will also raise us with Jesus and present us with you to himself.`},{"verse":15,"text":`All this is for your benefit, so that the grace that is reaching more and more people may cause thanksgiving to overflow to the glory of God.`},{"verse":16,"text":`Therefore we do not lose heart. Though outwardly we are wasting away, yet inwardly we are being renewed day by day.`},{"verse":17,"text":`For our light and momentary troubles are achieving for us an eternal glory that far outweighs them all.`},{"verse":18,"text":`So we fix our eyes not on what is seen, but on what is unseen, since what is seen is temporary, but what is unseen is eternal.`}]},
+            "Galatians 5":{name:"Galatians 5",translation:"NIV11",verses:[{"verse":1,"text":`It is for freedom that Christ has set us free. Stand firm, then, and do not let yourselves be burdened again by a yoke of slavery.`},{"verse":2,"text":`Mark my words! I, Paul, tell you that if you let yourselves be circumcised, Christ will be of no value to you at all.`},{"verse":3,"text":`Again I declare to every man who lets himself be circumcised that he is obligated to obey the whole law.`},{"verse":4,"text":`You who are trying to be justified by the law have been alienated from Christ; you have fallen away from grace.`},{"verse":5,"text":`For through the Spirit we eagerly await by faith the righteousness for which we hope.`},{"verse":6,"text":`For in Christ Jesus neither circumcision nor uncircumcision has any value. The only thing that counts is faith expressing itself through love.`},{"verse":7,"text":`You were running a good race. Who cut in on you to keep you from obeying the truth?`},{"verse":8,"text":`That kind of persuasion does not come from the one who calls you.`},{"verse":9,"text":`“A little yeast works through the whole batch of dough.”`},{"verse":10,"text":`I am confident in the Lord that you will take no other view. The one who is throwing you into confusion, whoever that may be, will have to pay the penalty.`},{"verse":11,"text":`Brothers and sisters, if I am still preaching circumcision, why am I still being persecuted? In that case the offense of the cross has been abolished.`},{"verse":12,"text":`As for those agitators, I wish they would go the whole way and emasculate themselves!`},{"verse":13,"text":`You, my brothers and sisters, were called to be free. But do not use your freedom to indulge the flesh; rather, serve one another humbly in love.`},{"verse":14,"text":`For the entire law is fulfilled in keeping this one command: “Love your neighbor as yourself.”`},{"verse":15,"text":`If you bite and devour each other, watch out or you will be destroyed by each other.`},{"verse":16,"text":`So I say, walk by the Spirit, and you will not gratify the desires of the flesh.`},{"verse":17,"text":`For the flesh desires what is contrary to the Spirit, and the Spirit what is contrary to the flesh. They are in conflict with each other, so that you are not to do whatever you want.`},{"verse":18,"text":`But if you are led by the Spirit, you are not under the law.`},{"verse":19,"text":`The acts of the flesh are obvious: sexual immorality, impurity and debauchery;`},{"verse":20,"text":`idolatry and witchcraft; hatred, discord, jealousy, fits of rage, selfish ambition, dissensions, factions`},{"verse":21,"text":`and envy; drunkenness, orgies, and the like. I warn you, as I did before, that those who live like this will not inherit the kingdom of God.`},{"verse":22,"text":`But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness,`},{"verse":23,"text":`gentleness and self-control. Against such things there is no law.`},{"verse":24,"text":`Those who belong to Christ Jesus have crucified the flesh with its passions and desires.`},{"verse":25,"text":`Since we live by the Spirit, let us keep in step with the Spirit.`},{"verse":26,"text":`Let us not become conceited, provoking and envying each other.`}]},
+            "Ephesians 1:3-13":{name:"Ephesians 1:3–13",translation:"NIV11",verses:[{"verse":3,"text":`Praise be to the God and Father of our Lord Jesus Christ, who has blessed us in the heavenly realms with every spiritual blessing in Christ.`},{"verse":4,"text":`For he chose us in him before the creation of the world to be holy and blameless in his sight. In love`},{"verse":5,"text":`he predestined us for adoption to sonship through Jesus Christ, in accordance with his pleasure and will—`},{"verse":6,"text":`to the praise of his glorious grace, which he has freely given us in the One he loves.`},{"verse":7,"text":`In him we have redemption through his blood, the forgiveness of sins, in accordance with the riches of God’s grace`},{"verse":8,"text":`that he lavished on us. With all wisdom and understanding,`},{"verse":9,"text":`he made known to us the mystery of his will according to his good pleasure, which he purposed in Christ,`},{"verse":10,"text":`to be put into effect when the times reach their fulfillment—to bring unity to all things in heaven and on earth under Christ.`},{"verse":11,"text":`In him we were also chosen, having been predestined according to the plan of him who works out everything in conformity with the purpose of his will,`},{"verse":12,"text":`in order that we, who were the first to put our hope in Christ, might be for the praise of his glory.`},{"verse":13,"text":`And you also were included in Christ when you heard the message of truth, the gospel of your salvation. When you believed, you were marked in him with a seal, the promised Holy Spirit,`}]},
+            "Philippians 2:1-16":{name:"Philippians 2:1–16",translation:"NIV11",verses:[{"verse":1,"text":`Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion,`},{"verse":2,"text":`then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind.`},{"verse":3,"text":`Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves,`},{"verse":4,"text":`not looking to your own interests but each of you to the interests of the others.`},{"verse":5,"text":`In your relationships with one another, have the same mindset as Christ Jesus:`},{"verse":6,"text":`Who, being in very nature God, did not consider equality with God something to be used to his own advantage;`},{"verse":7,"text":`rather, he made himself nothing by taking the very nature of a servant, being made in human likeness.`},{"verse":8,"text":`And being found in appearance as a man, he humbled himself by becoming obedient to death— even death on a cross!`},{"verse":9,"text":`Therefore God exalted him to the highest place and gave him the name that is above every name,`},{"verse":10,"text":`that at the name of Jesus every knee should bow, in heaven and on earth and under the earth,`},{"verse":11,"text":`and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.`},{"verse":12,"text":`Therefore, my dear friends, as you have always obeyed—not only in my presence, but now much more in my absence—continue to work out your salvation with fear and trembling,`},{"verse":13,"text":`for it is God who works in you to will and to act in order to fulfill his good purpose.`},{"verse":14,"text":`Do everything without grumbling or arguing,`},{"verse":15,"text":`so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky`},{"verse":16,"text":`as you hold firmly to the word of life. And then I will be able to boast on the day of Christ that I did not run or labor in vain.`}]},
+            "James 1-5": {
+                name: "James 1–5",
+                translation: "NIV11",
+                isMultiChapter: true,
+                verses: [
+                    {"verse":1,"chapter":1,"text":`James, a servant of God and of the Lord Jesus Christ, To the twelve tribes scattered among the nations: Greetings.`},{"verse":2,"chapter":1,"text":`Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds,`},{"verse":3,"chapter":1,"text":`because you know that the testing of your faith produces perseverance.`},{"verse":4,"chapter":1,"text":`Let perseverance finish its work so that you may be mature and complete, not lacking anything.`},{"verse":5,"chapter":1,"text":`If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.`},{"verse":6,"chapter":1,"text":`But when you ask, you must believe and not doubt, because the one who doubts is like a wave of the sea, blown and tossed by the wind.`},{"verse":7,"chapter":1,"text":`That person should not expect to receive anything from the Lord.`},{"verse":8,"chapter":1,"text":`Such a person is double-minded and unstable in all they do.`},{"verse":9,"chapter":1,"text":`Believers in humble circumstances ought to take pride in their high position.`},{"verse":10,"chapter":1,"text":`But the rich should take pride in their humiliation—since they will pass away like a wild flower.`},{"verse":11,"chapter":1,"text":`For the sun rises with scorching heat and withers the plant; its blossom falls and its beauty is destroyed. In the same way, the rich will fade away even while they go about their business.`},{"verse":12,"chapter":1,"text":`Blessed is the one who perseveres under trial because, having stood the test, that person will receive the crown of life that the Lord has promised to those who love him.`},{"verse":13,"chapter":1,"text":`When tempted, no one should say, “God is tempting me.” For God cannot be tempted by evil, nor does he tempt anyone;`},{"verse":14,"chapter":1,"text":`but each person is tempted when they are dragged away by their own evil desire and enticed.`},{"verse":15,"chapter":1,"text":`Then, after desire has conceived, it gives birth to sin; and sin, when it is full-grown, gives birth to death.`},{"verse":16,"chapter":1,"text":`Don’t be deceived, my dear brothers and sisters.`},{"verse":17,"chapter":1,"text":`Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.`},{"verse":18,"chapter":1,"text":`He chose to give us birth through the word of truth, that we might be a kind of firstfruits of all he created.`},
+                    {"verse":19,"chapter":1,"text":`My dear brothers and sisters, take note of this: Everyone should be quick to listen, slow to speak and slow to become angry,`},{"verse":20,"chapter":1,"text":`because human anger does not produce the righteousness that God desires.`},{"verse":21,"chapter":1,"text":`Therefore, get rid of all moral filth and the evil that is so prevalent and humbly accept the word planted in you, which can save you.`},{"verse":22,"chapter":1,"text":`Do not merely listen to the word, and so deceive yourselves. Do what it says.`},{"verse":23,"chapter":1,"text":`Anyone who listens to the word but does not do what it says is like someone who looks at his face in a mirror`},{"verse":24,"chapter":1,"text":`and, after looking at himself, goes away and immediately forgets what he looks like.`},{"verse":25,"chapter":1,"text":`But whoever looks intently into the perfect law that gives freedom, and continues in it—not forgetting what they have heard, but doing it—they will be blessed in what they do.`},{"verse":26,"chapter":1,"text":`Those who consider themselves religious and yet do not keep a tight rein on their tongues deceive themselves, and their religion is worthless.`},{"verse":27,"chapter":1,"text":`Religion that God our Father accepts as pure and faultless is this: to look after orphans and widows in their distress and to keep oneself from being polluted by the world.`},
+                    {"verse":1,"chapter":2,"text":`My brothers and sisters, believers in our glorious Lord Jesus Christ must not show favoritism.`},{"verse":2,"chapter":2,"text":`Suppose a man comes into your meeting wearing a gold ring and fine clothes, and a poor man in filthy old clothes also comes in.`},{"verse":3,"chapter":2,"text":`If you show special attention to the man wearing fine clothes and say, “Here’s a good seat for you,” but say to the poor man, “You stand there” or “Sit on the floor by my feet,”`},{"verse":4,"chapter":2,"text":`have you not discriminated among yourselves and become judges with evil thoughts?`},{"verse":5,"chapter":2,"text":`Listen, my dear brothers and sisters: Has not God chosen those who are poor in the eyes of the world to be rich in faith and to inherit the kingdom he promised those who love him?`},{"verse":6,"chapter":2,"text":`But you have dishonored the poor. Is it not the rich who are exploiting you? Are they not the ones who are dragging you into court?`},{"verse":7,"chapter":2,"text":`Are they not the ones who are blaspheming the noble name of him to whom you belong?`},{"verse":8,"chapter":2,"text":`If you really keep the royal law found in Scripture, “Love your neighbor as yourself,” you are doing right.`},{"verse":9,"chapter":2,"text":`But if you show favoritism, you sin and are convicted by the law as lawbreakers.`},{"verse":10,"chapter":2,"text":`For whoever keeps the whole law and yet stumbles at just one point is guilty of breaking all of it.`},{"verse":11,"chapter":2,"text":`For he who said, “You shall not commit adultery,” also said, “You shall not murder.” If you do not commit adultery but do commit murder, you have become a lawbreaker.`},{"verse":12,"chapter":2,"text":`Speak and act as those who are going to be judged by the law that gives freedom,`},{"verse":13,"chapter":2,"text":`because judgment without mercy will be shown to anyone who has not been merciful. Mercy triumphs over judgment.`},
+                    {"verse":14,"chapter":2,"text":`What good is it, my brothers and sisters, if someone claims to have faith but has no deeds? Can such faith save them?`},{"verse":15,"chapter":2,"text":`Suppose a brother or a sister is without clothes and daily food.`},{"verse":16,"chapter":2,"text":`If one of you says to them, “Go in peace; keep warm and well fed,” but does nothing about their physical needs, what good is it?`},{"verse":17,"chapter":2,"text":`In the same way, faith by itself, if it is not accompanied by action, is dead.`},{"verse":18,"chapter":2,"text":`But someone will say, “You have faith; I have deeds.” Show me your faith without deeds, and I will show you my faith by my deeds.`},{"verse":19,"chapter":2,"text":`You believe that there is one God. Good! Even the demons believe that—and shudder.`},{"verse":20,"chapter":2,"text":`You foolish person, do you want evidence that faith without deeds is useless?`},{"verse":21,"chapter":2,"text":`Was not our father Abraham considered righteous for what he did when he offered his son Isaac on the altar?`},{"verse":22,"chapter":2,"text":`You see that his faith and his actions were working together, and his faith was made complete by what he did.`},{"verse":23,"chapter":2,"text":`And the scripture was fulfilled that says, “Abraham believed God, and it was credited to him as righteousness,” and he was called God’s friend.`},{"verse":24,"chapter":2,"text":`You see that a person is considered righteous by what they do and not by faith alone.`},{"verse":25,"chapter":2,"text":`In the same way, was not even Rahab the prostitute considered righteous for what she did when she gave lodging to the spies and sent them off in a different direction?`},{"verse":26,"chapter":2,"text":`As the body without the spirit is dead, so faith without deeds is dead.`},
+                    {"verse":1,"chapter":3,"text":`Not many of you should become teachers, my fellow believers, because you know that we who teach will be judged more strictly.`},{"verse":2,"chapter":3,"text":`We all stumble in many ways. Anyone who is never at fault in what they say is perfect, able to keep their whole body in check.`},{"verse":3,"chapter":3,"text":`When we put bits into the mouths of horses to make them obey us, we can turn the whole animal.`},{"verse":4,"chapter":3,"text":`Or take ships as an example. Although they are so large and are driven by strong winds, they are steered by a very small rudder wherever the pilot wants to go.`},{"verse":5,"chapter":3,"text":`Likewise, the tongue is a small part of the body, but it makes great boasts. Consider what a great forest is set on fire by a small spark.`},{"verse":6,"chapter":3,"text":`The tongue also is a fire, a world of evil among the parts of the body. It corrupts the whole body, sets the whole course of one’s life on fire, and is itself set on fire by hell.`},{"verse":7,"chapter":3,"text":`All kinds of animals, birds, reptiles and sea creatures are being tamed and have been tamed by mankind,`},{"verse":8,"chapter":3,"text":`but no human being can tame the tongue. It is a restless evil, full of deadly poison.`},{"verse":9,"chapter":3,"text":`With the tongue we praise our Lord and Father, and with it we curse human beings, who have been made in God’s likeness.`},{"verse":10,"chapter":3,"text":`Out of the same mouth come praise and cursing. My brothers and sisters, this should not be.`},{"verse":11,"chapter":3,"text":`Can both fresh water and salt water flow from the same spring?`},{"verse":12,"chapter":3,"text":`My brothers and sisters, can a fig tree bear olives, or a grapevine bear figs? Neither can a salt spring produce fresh water.`},{"verse":13,"chapter":3,"text":`Who is wise and understanding among you? Let them show it by their good life, by deeds done in the humility that comes from wisdom.`},{"verse":14,"chapter":3,"text":`But if you harbor bitter envy and selfish ambition in your hearts, do not boast about it or deny the truth.`},{"verse":15,"chapter":3,"text":`Such “wisdom” does not come down from heaven but is earthly, unspiritual, demonic.`},{"verse":16,"chapter":3,"text":`For where you have envy and selfish ambition, there you find disorder and every evil practice.`},{"verse":17,"chapter":3,"text":`But the wisdom that comes from heaven is first of all pure; then peace-loving, considerate, submissive, full of mercy and good fruit, impartial and sincere.`},{"verse":18,"chapter":3,"text":`Peacemakers who sow in peace reap a harvest of righteousness.`},
+                    {"verse":1,"chapter":4,"text":`What causes fights and quarrels among you? Don’t they come from your desires that battle within you?`},{"verse":2,"chapter":4,"text":`You desire but do not have, so you kill. You covet but you cannot get what you want, so you quarrel and fight. You do not have because you do not ask God.`},{"verse":3,"chapter":4,"text":`When you ask, you do not receive, because you ask with wrong motives, that you may spend what you get on your pleasures.`},{"verse":4,"chapter":4,"text":`You adulterous people, don’t you know that friendship with the world means enmity against God? Therefore, anyone who chooses to be a friend of the world becomes an enemy of God.`},{"verse":5,"chapter":4,"text":`Or do you think Scripture says without reason that he jealously longs for the spirit he has caused to dwell in us?`},{"verse":6,"chapter":4,"text":`But he gives us more grace. That is why Scripture says: “God opposes the proud but shows favor to the humble.”`},{"verse":7,"chapter":4,"text":`Submit yourselves, then, to God. Resist the devil, and he will flee from you.`},{"verse":8,"chapter":4,"text":`Come near to God and he will come near to you. Wash your hands, you sinners, and purify your hearts, you double-minded.`},{"verse":9,"chapter":4,"text":`Grieve, mourn and wail. Change your laughter to mourning and your joy to gloom.`},{"verse":10,"chapter":4,"text":`Humble yourselves before the Lord, and he will lift you up.`},{"verse":11,"chapter":4,"text":`Brothers and sisters, do not slander one another. Anyone who speaks against a brother or sister or judges them speaks against the law and judges it. When you judge the law, you are not keeping it, but sitting in judgment on it.`},{"verse":12,"chapter":4,"text":`There is only one Lawgiver and Judge, the one who is able to save and destroy. But you—who are you to judge your neighbor?`},{"verse":13,"chapter":4,"text":`Now listen, you who say, “Today or tomorrow we will go to this or that city, spend a year there, carry on business and make money.”`},{"verse":14,"chapter":4,"text":`Why, you do not even know what will happen tomorrow. What is your life? You are a mist that appears for a little while and then vanishes.`},{"verse":15,"chapter":4,"text":`Instead, you ought to say, “If it is the Lord’s will, we will live and do this or that.”`},{"verse":16,"chapter":4,"text":`As it is, you boast in your arrogant schemes. All such boasting is evil.`},{"verse":17,"chapter":4,"text":`If anyone, then, knows the good they ought to do and doesn’t do it, it is sin for them.`},
+                    {"verse":1,"chapter":5,"text":`Now listen, you rich people, weep and wail because of the misery that is coming on you.`},{"verse":2,"chapter":5,"text":`Your wealth has rotted, and moths have eaten your clothes.`},{"verse":3,"chapter":5,"text":`Your gold and silver are corroded. Their corrosion will testify against you and eat your flesh like fire. You have hoarded wealth in the last days.`},{"verse":4,"chapter":5,"text":`Look! The wages you failed to pay the workers who mowed your fields are crying out against you. The cries of the harvesters have reached the ears of the Lord Almighty.`},{"verse":5,"chapter":5,"text":`You have lived on earth in luxury and self-indulgence. You have fattened yourselves in the day of slaughter.`},{"verse":6,"chapter":5,"text":`You have condemned and murdered the innocent one, who was not opposing you.`},{"verse":7,"chapter":5,"text":`Be patient, then, brothers and sisters, until the Lord’s coming. See how the farmer waits for the land to yield its valuable crop, patiently waiting for the autumn and spring rains.`},{"verse":8,"chapter":5,"text":`You too, be patient and stand firm, because the Lord’s coming is near.`},{"verse":9,"chapter":5,"text":`Don’t grumble against one another, brothers and sisters, or you will be judged. The Judge is standing at the door!`},{"verse":10,"chapter":5,"text":`Brothers and sisters, as an example of patience in the face of suffering, take the prophets who spoke in the name of the Lord.`},{"verse":11,"chapter":5,"text":`As you know, we count as blessed those who have persevered. You have heard of Job’s perseverance and have seen what the Lord finally brought about. The Lord is full of compassion and mercy.`},{"verse":12,"chapter":5,"text":`Above all, my brothers and sisters, do not swear—not by heaven or by earth or by anything else. All you need to say is a simple “Yes” or “No.” Otherwise you will be condemned.`},{"verse":13,"chapter":5,"text":`Is anyone among you in trouble? Let them pray. Is anyone happy? Let them sing songs of praise.`},{"verse":14,"chapter":5,"text":`Is anyone among you sick? Let them call the elders of the church to pray over them and anoint them with oil in the name of the Lord.`},{"verse":15,"chapter":5,"text":`And the prayer offered in faith will make the sick person well; the Lord will raise them up. If they have sinned, they will be forgiven.`},{"verse":16,"chapter":5,"text":`Therefore confess your sins to each other and pray for each other so that you may be healed. The prayer of a righteous person is powerful and effective.`},{"verse":17,"chapter":5,"text":`Elijah was a human being, even as we are. He prayed earnestly that it would not rain, and it did not rain on the land for three and a half years.`},{"verse":18,"chapter":5,"text":`Again he prayed, and the heavens gave rain, and the earth produced its crops.`},{"verse":19,"chapter":5,"text":`My brothers and sisters, if one of you should wander from the truth and someone should bring that person back,`},{"verse":20,"chapter":5,"text":`remember this: Whoever turns a sinner from the error of their way will save them from death and cover over a multitude of sins.`}
+                ]
+            },
+            "1 John 4:7-21":{name:"1 John 4:7–21",translation:"NIV11",verses:[{"verse":7,"text":`Dear friends, let us love one another, for love comes from God. Everyone who loves has been born of God and knows God.`},{"verse":8,"text":`Whoever does not love does not know God, because God is love.`},{"verse":9,"text":`This is how God showed his love among us: He sent his one and only Son into the world that we might live through him.`},{"verse":10,"text":`This is love: not that we loved God, but that he loved us and sent his Son as an atoning sacrifice for our sins.`},{"verse":11,"text":`Dear friends, since God so loved us, we also ought to love one another.`},{"verse":12,"text":`No one has ever seen God; but if we love one another, God lives in us and his love is made complete in us.`},{"verse":13,"text":`This is how we know that we live in him and he in us: He has given us of his Spirit.`},{"verse":14,"text":`And we have seen and testify that the Father has sent his Son to be the Savior of the world.`},{"verse":15,"text":`If anyone acknowledges that Jesus is the Son of God, God lives in them and they in God.`},{"verse":16,"text":`And so we know and rely on the love God has for us. God is love. Whoever lives in love lives in God, and God in them.`},{"verse":17,"text":`This is how love is made complete among us so that we will have confidence on the day of judgment: In this world we are like Jesus.`},{"verse":18,"text":`There is no fear in love. But perfect love drives out fear, because fear has to do with punishment. The one who fears is not made perfect in love.`},{"verse":19,"text":`We love because he first loved us.`},{"verse":20,"text":`Whoever claims to love God yet hates a brother or sister is a liar. For whoever does not love their brother and sister, whom they have seen, cannot love God, whom they have not seen.`},{"verse":21,"text":`And he has given us this command: Anyone who loves God must also love their brother and sister.`}]},
+            "Revelation 21:1-5":{name:"Revelation 21:1–5",translation:"NIV11",verses:[{"verse":1,"text":`Then I saw “a new heaven and a new earth,” for the first heaven and the first earth had passed away, and there was no longer any sea.`},{"verse":2,"text":`I saw the Holy City, the new Jerusalem, coming down out of heaven from God, prepared as a bride beautifully dressed for her husband.`},{"verse":3,"text":`And I heard a loud voice from the throne saying, “Look! God’s dwelling place is now among the people, and he will dwell with them. They will be his people, and God himself will be with them and be their God.`},{"verse":4,"text":`‘He will wipe every tear from their eyes. There will be no more death’ or mourning or crying or pain, for the old order of things has passed away.”`},{"verse":5,"text":`He who was seated on the throne said, “I am making everything new!” Then he said, “Write this down, for these words are trustworthy and true.”`}]}
+        };
+
+        const passageOrder = [
+            "Genesis 1:28", "Psalm 23", "Psalm 27:1-6", "Psalm 103:1-13", "Matthew 5-7", 
+            "Matthew 28:18-20", "John 15:1-17", "John 17:20-26", "Romans 8", "Romans 12", 
+            "1 Corinthians 13", "2 Corinthians 4:7-18", "Galatians 5", "Ephesians 1:3-13", 
+            "Philippians 2:1-16", "James 1-5", "1 John 4:7-21", "Revelation 21:1-5"
+        ];
+
+        // --- State Management ---
+        function savePlan() {
+            if (plan && Object.keys(plan).length > 0) {
+                 localStorage.setItem('memorizationPlan', JSON.stringify(plan));
+            }
+        }
+
+        function loadPlan() {
+            const savedPlan = localStorage.getItem('memorizationPlan');
+            if (savedPlan) {
+                plan = JSON.parse(savedPlan);
+                return true;
+            }
+            return false;
+        }
+        
+        // --- UI Updates ---
+        function showLoader(show) {
+            loaderModal.classList.toggle('hidden', !show);
+        }
+        
+        function toggleView(showApp) {
+            appContainer.classList.toggle('hidden', !showApp);
+            appContainer.classList.toggle('flex', showApp);
+            setupModal.classList.toggle('hidden', showApp);
+            if(!showApp) {
+                setupModal.classList.add('flex');
+            }
+        }
+
+        function updateUI() {
+            if (!plan || !plan.verses) return;
+            
+            const totalVerses = plan.verses.length;
+            const versesDone = plan.progress;
+            const percent = totalVerses > 0 ? (versesDone / totalVerses) * 100 : 0;
+            
+            const [mainRef, translation] = plan.reference.split('(');
+            passageTitle.innerHTML = `${mainRef.trim()} <span class="text-base opacity-75">${translation.replace(')','')}</span>`;
+
+            versesMemorizedSpan.textContent = versesDone;
+            percentCompleteSpan.textContent = `${percent.toFixed(0)}%`;
+            progressBar.style.width = `${percent}%`;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(plan.targetDate);
+            targetDateDisplay.textContent = target.toLocaleDateString(); 
+            const diffTime = target.getTime() - today.getTime();
+            const daysLeft = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            daysRemainingSpan.textContent = daysLeft;
+            
+            const remainingVerses = totalVerses - versesDone;
+            const versesPerDay = Math.ceil(remainingVerses / (daysLeft > 0 ? daysLeft : 1));
+            
+            if (versesDone >= totalVerses) {
+                progressMessage.textContent = "Congratulations! You've memorized the entire passage!";
+                markCompleteButton.classList.add('hidden');
+            } else {
+                progressMessage.textContent = `Memorize ${versesPerDay} verse${versesPerDay > 1 ? 's' : ''} today to stay on track.`;
+                markCompleteButton.classList.remove('hidden');
+            }
+            
+            renderVerses();
+        }
+
+        function renderVerses() {
+            todaysVersesDisplay.innerHTML = '';
+            continuedReadingDisplay.innerHTML = '';
+            continuedReadingSection.classList.add('hidden');
+
+            if (!plan || !plan.verses) return;
+
+            const totalVerses = plan.verses.length;
+            const versesDone = plan.progress;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(plan.targetDate);
+            const diffTime = target.getTime() - today.getTime();
+            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            const remainingVerses = totalVerses - versesDone;
+            const versesPerDay = Math.ceil(remainingVerses / daysLeft);
+
+            const versesToShowToday = versesDone + versesPerDay;
+            
+            plan.verses.forEach((verse, index) => {
+                const p = document.createElement('p');
+                // For multi-chapter passages, display chapter:verse
+                const verseLabel = verse.chapter ? `${verse.chapter}:${verse.verse}` : verse.verse;
+                p.innerHTML = `<sup class="font-bold opacity-70">${verseLabel}</sup> ${verse.text}`;
+
+                if (index < versesToShowToday) {
+                    if (index < versesDone) {
+                        p.classList.add('opacity-50', 'italic');
+                    } else {
+                        p.classList.add('font-semibold');
+                    }
+                    todaysVersesDisplay.appendChild(p);
+                } else {
+                    continuedReadingSection.classList.remove('hidden');
+                    continuedReadingDisplay.appendChild(p);
+                }
+            });
+        }
+
+        // --- Event Handlers ---
+        passageSelect.addEventListener('change', (e) => {
+            const selectedPassageKey = e.target.value;
+            const passageData = preloadedPassages[selectedPassageKey];
+            
+            if (passageData && !passageData.isMultiChapter && !selectedPassageKey.includes(':')) {
+                verseRangeContainer.classList.remove('hidden');
+                
+                // Populate dropdowns
+                startVerseSelect.innerHTML = '';
+                endVerseSelect.innerHTML = '';
+                
+                passageData.verses.forEach((v, i) => {
+                    const startOption = document.createElement('option');
+                    startOption.value = v.verse;
+                    startOption.textContent = v.verse;
+                    startVerseSelect.appendChild(startOption);
+
+                    const endOption = document.createElement('option');
+                    endOption.value = v.verse;
+                    endOption.textContent = v.verse;
+                    endVerseSelect.appendChild(endOption);
+                });
+                endVerseSelect.value = passageData.verses[passageData.verses.length - 1].verse;
+
+            } else {
+                verseRangeContainer.classList.add('hidden');
+                startVerseSelect.innerHTML = '';
+                endVerseSelect.innerHTML = '';
+            }
+        });
+        
+        startPlanButton.addEventListener('click', async () => {
+            const selectedPassageKey = passageSelect.value;
+            const targetDate = targetDateInput.value;
+
+            if (!selectedPassageKey || !targetDate) {
+                setupError.textContent = "Please select a passage and a target date.";
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            if (targetDate < today) {
+                setupError.textContent = "Target date cannot be in the past.";
+                return;
+            }
+
+            const passageData = preloadedPassages[selectedPassageKey];
+            let allVerses = [...passageData.verses]; // Create a copy
+            let finalReference = `${passageData.name} (${passageData.translation})`;
+            
+            const startVerse = parseInt(startVerseSelect.value, 10);
+            const endVerse = parseInt(endVerseSelect.value, 10);
+
+            // Filter verses if a valid range is provided
+            if (!verseRangeContainer.classList.contains('hidden') && !isNaN(startVerse) && !isNaN(endVerse) && startVerse <= endVerse) {
+                allVerses = allVerses.filter(v => v.verse >= startVerse && v.verse <= endVerse);
+                const bookAndChapter = passageData.name.split(':')[0]; 
+                finalReference = `${bookAndChapter}:${startVerse}-${endVerse} (${passageData.translation})`;
+            }
+
+            if (allVerses.length === 0) {
+                setupError.textContent = "The selected verse range is invalid for this passage.";
+                return;
+            }
+
+            setupError.textContent = "";
+            
+            plan = {
+                key: selectedPassageKey, // Store the key for sharing
+                reference: finalReference,
+                verses: allVerses,
+                targetDate: targetDate,
+                totalVerses: allVerses.length,
+                progress: 0
+            };
+            savePlan();
+            toggleView(true);
+            updateUI();
+            
+            // Show the menu hint if it's the first time
+            if (!localStorage.getItem('hasSeenInstallPrompt')) {
+                installHintModal.classList.remove('hidden');
+            }
+        });
+
+        markCompleteButton.addEventListener('click', () => {
+            if (!plan || !plan.verses) return;
+            
+            const totalVerses = plan.verses.length;
+            const versesDone = plan.progress;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(plan.targetDate);
+            const diffTime = target.getTime() - today.getTime();
+            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            const remainingVerses = totalVerses - versesDone;
+            const versesPerDay = Math.ceil(remainingVerses / daysLeft);
+
+            plan.progress = Math.min(totalVerses, versesDone + versesPerDay);
+            savePlan();
+            updateUI();
+        });
+        
+        // Menu logic
+        const toggleMenu = () => {
+            sideMenu.classList.toggle('open');
+            sideMenuOverlay.classList.toggle('active');
+        };
+        menuButton.addEventListener('click', toggleMenu);
+        sideMenuOverlay.addEventListener('click', toggleMenu);
+        sideMenuCloseButton.addEventListener('click', toggleMenu);
+        
+        resetPlanBtn.addEventListener('click', () => {
+            localStorage.removeItem('memorizationPlan');
+            plan = {};
+            passageSelect.value = "";
+            targetDateInput.value = "";
+            verseRangeContainer.classList.add('hidden');
+            startVerseSelect.innerHTML = '';
+            endVerseSelect.innerHTML = '';
+            setupError.textContent = "";
+            toggleView(false);
+            toggleMenu();
+        });
+
+        sharePlanBtn.addEventListener('click', () => {
+            if (!plan || !plan.key) {
+                alert("Please start a plan before sharing.");
+                return;
+            }
+            const baseUrl = window.location.origin + window.location.pathname;
+            const params = new URLSearchParams();
+            params.append('passage', plan.key);
+
+            const shareUrl = `${baseUrl}?${params.toString()}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Seed Memorizer Plan',
+                    text: `Join me in memorizing ${plan.reference}!`,
+                    url: shareUrl
+                }).catch(console.error);
+            } else {
+                try {
+                    const el = document.createElement('textarea');
+                    el.value = shareUrl;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    alert("Plan URL copied to clipboard!");
+                } catch(e) {
+                     alert("Could not copy URL. Please copy it manually from the address bar.");
+                }
+            }
+             toggleMenu();
+        });
+        
+        shareAppBtn.addEventListener('click', () => {
+             const shareUrl = window.location.origin + window.location.pathname;
+             if (navigator.share) {
+                navigator.share({
+                    title: 'Seed Memorizer',
+                    text: 'A simple app to help you memorize scripture.',
+                    url: shareUrl
+                }).catch(console.error);
+            } else {
+                 try {
+                    const el = document.createElement('textarea');
+                    el.value = shareUrl;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    alert("App URL copied to clipboard!");
+                } catch(e) {
+                     alert("Could not copy URL. Please copy it manually from the address bar.");
+                }
+            }
+             toggleMenu();
+        });
+
+        faqBtn.addEventListener('click', () => {
+            faqModal.classList.remove('hidden');
+            toggleMenu();
+        });
+
+        faqCloseBtn.addEventListener('click', () => {
+            faqModal.classList.add('hidden');
+        });
+        
+        closeInstallHintBtn.addEventListener('click', () => {
+             installHintModal.classList.add('hidden');
+             localStorage.setItem('hasSeenInstallPrompt', 'true');
+        });
+
+        checkForUpdatesBtn.addEventListener('click', () => {
+            savePlan();
+            window.location.reload(true);
+        });
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            passageOrder.forEach(key => {
+                const passage = preloadedPassages[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = passage.name;
+                passageSelect.appendChild(option);
+            });
+            
+            // Check for shared plan in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedPassage = urlParams.get('passage');
+            if (sharedPassage && preloadedPassages[sharedPassage]) {
+                passageSelect.value = sharedPassage;
+                passageSelect.dispatchEvent(new Event('change')); // Trigger change event to show verse selectors if needed
+            }
+
+            if (loadPlan()) {
+                toggleView(true);
+                updateUI();
+            } else {
+                toggleView(false);
+                if (!localStorage.getItem('hasSeenInstallPrompt')) {
+                    installHintModal.classList.remove('hidden');
+                }
+            }
+            targetDateInput.min = new Date().toISOString().split("T")[0];
+        });
+
+    </script>
+</body>
+</html>
+e

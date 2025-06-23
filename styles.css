@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.tagline {
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+main {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.intro p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  background: #1a73e8;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  flex: 1;
+}
+
+.btn.secondary {
+  background: #e2e8f0;
+  color: #1a1a1a;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #888;
+  padding: 1rem;
+}

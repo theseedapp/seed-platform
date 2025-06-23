@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed: Slow down. Think with God. Live rooted.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration for colors and font */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff9de;
+            /* seed-off-white */
+            color: #34403a;
+            /* seed-dark-green */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #fff3bf;
+            /* seed-light-yellow */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a37c;
+            /* seed-light-olive */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #285238;
+            /* seed-medium-green */
+        }
+
+        /* Custom animation for fading in sections */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+    </style>
+    <script>
+        // Tailwind CSS custom configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'seed-dark-green': '#34403a',
+                        'seed-medium-green': '#285238',
+                        'seed-light-olive': '#94a37c',
+                        'seed-pale-yellow': '#cacb9e',
+                        'seed-light-yellow': '#fff3bf',
+                        'seed-off-white': '#fff9de',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Favicon for browser tabs -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/hMPdDWB.png">
+
+    <!-- Apple Touch Icon for iOS Home Screen -->
+    <link rel="apple-touch-icon" href="https://i.imgur.com/hMPdDWB.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body class="font-inter text-seed-dark-green bg-seed-off-white min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-seed-dark-green text-seed-off-white shadow-md p-4 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-4">
+            <!-- Logo - Home Button -->
+            <a href="#home" class="flex items-center" onclick="showSection('home')">
+                <img src="https://i.imgur.com/eF4vmiG.png" alt="Seed Logo" class="h-8 rounded-md">
+            </a>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            <!-- Navigation Links -->
+            <ul id="main-nav" class="hidden md:flex space-x-6 text-lg">
+                <li><a href="#home" class="hover:text-seed-pale-yellow transition duration-300 rounded-md p-2"
+                        onclick="showSection('home')">Home</a></li>
+                <li><a href="#blog" class="hover:text-seed-pale-yellow transition duration-300 rounded-md p-2"
+                        onclick="showSection('blog')">Blog</a></li>
+                <li><a href="/app" class="hover:text-seed-pale-yellow transition duration-300 rounded-md p-2">Open App</a></li>
+            </ul>
+        </nav>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu-dropdown" class="md:hidden hidden bg-seed-dark-green p-4 mt-2 rounded-lg shadow-lg">
+            <ul class="flex flex-col space-y-3 text-lg">
+                <li><a href="#home"
+                        class="block text-seed-off-white hover:text-seed-pale-yellow transition duration-300 p-2 rounded-md"
+                        onclick="showSection('home'); hideMobileMenu()">Home</a></li>
+                <li><a href="#blog"
+                        class="block text-seed-off-white hover:text-seed-pale-yellow transition duration-300 p-2 rounded-md"
+                        onclick="showSection('blog'); hideMobileMenu()">Blog</a></li>
+                <li><a href="/app"
+                        class="block text-seed-off-white hover:text-seed-pale-yellow transition duration-300 p-2 rounded-md"
+                        onclick="hideMobileMenu()">Open App</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        <!-- Landing Page Section -->
+        <section id="home" class="page-section container mx-auto px-4 py-12 md:py-20 animate-fade-in">
+            <!-- HERO - Original Layout, new Problem Statement -->
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16 mb-16 md:mb-24">
+                <!-- Text Content -->
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight text-seed-dark-green">
+                        <span class="block">Slow down.</span>
+                        <span class="block">Think with God.</span>
+                        <span class="block text-seed-medium-green">Live rooted.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl mb-4 text-seed-dark-green max-w-xl mx-auto md:mx-0">
+                        You want to become more like Jesus. But modern life pulls you in every direction.
+                    </p>
+                    <p class="text-lg md:text-xl mb-4 text-seed-dark-green max-w-xl mx-auto md:mx-0">
+                        You’re hungry for transformation—not just information.<br>
+                        You’re not trying to win a Bible quiz.<br>
+                        You want to become a person of love.
+                    </p>
+                    <p class="text-lg md:text-xl mb-8 text-seed-dark-green max-w-xl mx-auto md:mx-0">
+                        But even with the best intentions, it’s hard to know where to start.<br>
+                        How do you move from knowing Scripture to being shaped by it?
+                    </p>
+                    <!-- Call to Action Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                        <a href="/app"
+                            class="bg-seed-medium-green text-seed-off-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-seed-dark-green transition-all duration-300 shadow-lg flex items-center justify-center space-x-2">
+                            <i class="fas fa-leaf text-xl"></i>
+                            <span>Get Started</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- FEATURES -->
+            <div id="meet-seed-features" class="mt-16 md:mt-24 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-seed-medium-green">
+                    Meet Seed — a simple, thoughtful way to practice meditation and memorization with Jesus.
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div
+                        class="bg-seed-light-yellow p-6 rounded-2xl shadow-lg flex flex-col items-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-seedling text-4xl text-seed-medium-green mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-seed-dark-green">Cultivate & Plan</h3>
+                        <p class="text-seed-dark-green text-center">Choose a passage of Scripture to cultivate and set a
+                            target date to pace your practice intentionally.</p>
+                    </div>
+                    <div
+                        class="bg-seed-light-yellow p-6 rounded-2xl shadow-lg flex flex-col items-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-brain text-4xl text-seed-medium-green mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-seed-dark-green">Practice & Grow</h3>
+                        <p class="text-seed-dark-green text-center">Engage with interactive exercises like 'First
+                            Letter' and 'Word-for-Word' to deepen retention.</p>
+                    </div>
+                    <div
+                        class="bg-seed-light-yellow p-6 rounded-2xl shadow-lg flex flex-col items-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-chart-line text-4xl text-seed-medium-green mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-seed-dark-green">Track & Share</h3>
+                        <p class="text-seed-dark-green text-center">Visually track your pace with progress bars and
+                            daily goals, then share your journey with friends.</p>
+                    </div>
+                </div>
+                <p class="text-xl md:text-2xl font-semibold italic mt-10 text-seed-medium-green">
+                    It’s more than a tool. It’s a rhythm of formation.
+                </p>
+            </div>
+            <!-- BECAUSE FORMATION TAKES TIME -->
+            <div class="mt-16 md:mt-24 text-center bg-seed-off-white p-8 rounded-3xl shadow-inner">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-seed-medium-green">Because formation takes time</h2>
+                <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-seed-dark-green">
+                    Seed doesn’t rush. It invites you to slow down, meditate, and think deeply with the Holy Spirit.
+                </p>
+                <blockquote
+                    class="text-xl md:text-2xl italic font-medium text-seed-dark-green border-l-4 border-seed-medium-green pl-6 py-2 mx-auto max-w-2xl mb-6">
+                    “Blessed is the one… whose delight is in the law of the LORD, and who meditates on his law day and
+                    night.”
+                    <footer class="mt-4 text-lg font-normal text-seed-medium-green">— Psalm 1:1–2 (NIV)</footer>
+                </blockquote>
+                <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-seed-dark-green">
+                    It’s a gentle guide to help plant God’s Word—not just in your mind, but in your heart.
+                </p>
+                <blockquote
+                    class="text-xl md:text-2xl italic font-medium text-seed-dark-green border-l-4 border-seed-pale-yellow pl-6 py-2 mx-auto max-w-2xl">
+                    “What you think, you fill your heart with. What your heart is full of, your life will be full of.”
+                </blockquote>
+            </div>
+            <!-- A VISION FOR YOUR THOUGHT LIFE -->
+            <div class="mt-16 md:mt-24 text-center bg-seed-pale-yellow p-8 rounded-3xl shadow-lg">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-seed-medium-green">A vision for your thought life
+                </h2>
+                <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-seed-dark-green">
+                    You were made to carry the Word inside you, to walk in step with Jesus.
+                </p>
+                <blockquote
+                    class="text-xl md:text-2xl italic font-medium text-seed-dark-green border-l-4 border-seed-medium-green pl-6 py-2 mx-auto max-w-2xl mb-6">
+                    “He also said, ‘This is what the kingdom of God is like. A man scatters seed on the ground. Night
+                    and day, whether he sleeps or gets up, the seed sprouts and grows, though he does not know how. All
+                    by itself the soil produces grain—first the stalk, then the head, then the full kernel in the
+                    head.’”
+                    <footer class="mt-4 text-lg font-normal text-seed-medium-green">— Mark 4:26–29 (NIV)</footer>
+                </blockquote>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-seed-dark-green">
+                    This isn’t about forced growth. It’s about the Spirit working through Scripture in you—slowly,
+                    surely, mysteriously.
+                </p>
+            </div>
+            <!-- WASHED AND ROOTED BY THE WORD -->
+            <div class="mt-16 md:mt-24 text-center bg-seed-off-white p-8 rounded-3xl shadow-inner">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-seed-medium-green">Washed and rooted by the Word
+                </h2>
+                <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-seed-dark-green">
+                    This practice isn’t passive—it’s sanctifying.
+                </p>
+                <blockquote
+                    class="text-xl md:text-2xl italic font-medium text-seed-dark-green border-l-4 border-seed-medium-green pl-6 py-2 mx-auto max-w-2xl mb-6">
+                    “to make her holy, cleansing her by the washing with water through the word,”
+                    <footer class="mt-4 text-lg font-normal text-seed-medium-green">— Ephesians 5:26 (NIV)</footer>
+                </blockquote>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-seed-dark-green">
+                    Seed isn’t just memorization—it’s daily immersion in grace that reshapes our hearts.
+                </p>
+            </div>
+            <!-- FINAL CALL TO ACTION -->
+            <div class="mt-16 md:mt-24 text-center bg-seed-light-yellow p-8 rounded-3xl shadow-lg">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-seed-medium-green">Let's slow down together.</h2>
+                <p class="text-lg md:text-xl mb-4 max-w-3xl mx-auto text-seed-dark-green">
+                    The world is noisy. But you were made for more.
+                </p>
+                <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-seed-dark-green">
+                    Make God your constant companion instead of social media.
+                </p>
+                <p class="text-lg md:text-xl mb-6 font-semibold max-w-3xl mx-auto text-seed-dark-green">
+                    Slow down. Think with Him. Let His Word shape you.
+                </p>
+                <p class="text-2xl md:text-3xl italic font-semibold text-seed-medium-green mb-8">
+                    It takes time to tend to a soul.
+                </p>
+                <!-- Call to Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-sm mx-auto">
+                    <a href="/app"
+                        class="bg-seed-medium-green text-seed-off-white px-10 py-4 rounded-full text-xl font-semibold hover:bg-seed-dark-green transition-all duration-300 shadow-lg flex items-center justify-center space-x-3">
+                        <i class="fas fa-seedling text-2xl"></i>
+                        <span>Get Started</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Page Section -->
+        <section id="blog" class="page-section hidden container mx-auto px-4 py-12 md:py-20 animate-fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 text-seed-dark-green">Cultivating Thought Life
+            </h1>
+
+            <!-- Blog Categories/Tags (Simple filter example) -->
+            <div class="text-center mb-10">
+                <button
+                    class="blog-filter-btn bg-seed-medium-green text-seed-off-white px-6 py-2 rounded-full text-lg font-semibold mr-3 mb-3 hover:bg-seed-dark-green transition duration-300 shadow-md"
+                    data-category="all">All Topics</button>
+                <button
+                    class="blog-filter-btn bg-seed-light-olive text-seed-dark-green px-6 py-2 rounded-full text-lg font-semibold mr-3 mb-3 hover:bg-seed-medium-green hover:text-seed-off-white transition duration-300 shadow-md"
+                    data-category="Light & Stillness">Light & Stillness</button>
+                <button
+                    class="blog-filter-btn bg-seed-light-olive text-seed-dark-green px-6 py-2 rounded-full text-lg font-semibold mr-3 mb-3 hover:bg-seed-medium-green hover:text-seed-off-white transition duration-300 shadow-md"
+                    data-category="Movement & Grace">Movement & Grace</button>
+                <button
+                    class="blog-filter-btn bg-seed-light-olive text-seed-dark-green px-6 py-2 rounded-full text-lg font-semibold mb-3 hover:bg-seed-medium-green hover:text-seed-off-white transition duration-300 shadow-md"
+                    data-category="Transformation">Transformation</button>
+            </div>
+
+            <!-- Blog Post List -->
+            <div id="blog-post-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog posts will be injected here by JavaScript -->
+            </div>
+
+            <!-- Full Blog Post View (initially hidden) -->
+            <div id="full-blog-post"
+                class="hidden bg-seed-off-white p-8 rounded-3xl shadow-xl border-t-8 border-seed-medium-green max-w-4xl mx-auto my-12">
+                <button id="back-to-blog-list"
+                    class="text-seed-medium-green hover:text-seed-dark-green mb-6 text-lg font-medium flex items-center space-x-2 transition duration-300">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to all posts</span>
+                </button>
+                <h2 id="post-title" class="text-4xl font-bold mb-4 text-seed-dark-green"></h2>
+                <p class="text-seed-light-olive text-sm mb-6">
+                    <span id="post-date" class="mr-2"></span> | <span id="post-category"></span>
+                </p>
+                <div id="post-content" class="prose max-w-none text-seed-dark-green leading-relaxed text-lg">
+                    <!-- Article content will be injected here -->
+                </div>
+                <div class="mt-8 pt-6 border-t border-seed-pale-yellow text-center">
+                    <p class="text-lg italic text-seed-medium-green mb-4">
+                        Ready to deepen your meditation?
+                    </p>
+                    <button
+                        class="bg-seed-medium-green text-seed-off-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-seed-dark-green transition-all duration-300 shadow-lg"
+                        onclick="showSection('app');">
+                        Try this passage in Seed App
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- App Page Section (removed from landing page) -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-seed-dark-green text-seed-off-white text-center p-8 mt-12 rounded-t-3xl shadow-lg">
+        <div class="container mx-auto">
+            <img src="https://i.imgur.com/hMPdDWB.png" alt="Seed PWA Icon" class="h-10 mx-auto mb-4 rounded-md">
+            <!-- Brandmark below icon -->
+            <img src="https://i.imgur.com/EFHPoB5.png" alt="Seed Brandmark" class="h-10 mx-auto mb-4">
+            <p class="text-lg mb-4">&copy; 2025 Seed App. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 text-2xl">
+                <a href="#" class="hover:text-seed-pale-yellow transition duration-300"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-seed-pale-yellow transition duration-300"><i
+                        class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-seed-pale-yellow transition duration-300"><i
+                        class="fab fa-twitter"></i></a>
+            </div>
+            <p class="mt-6 text-sm text-seed-pale-yellow">
+                Designed with purpose, built for spiritual growth.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Page Navigation, Blog Loading, and App Logic -->
+    <script>
+        // --- Global State & Data ---
+        // Mock blog post data (simulating a JSON file)
+        const blogPosts = [
+            {
+                id: '1',
+                title: 'The Art of Light & Stillness',
+                category: 'Light & Stillness',
+                date: 'June 20, 2025',
+                excerpt: 'Discover how stillness and focusing on divine light can transform your meditation practice, creating space for the Holy Spirit to speak.',
+                content: `
+                    <p>True spiritual formation begins in quiet moments, embracing stillness. When we quiet our minds, we create space for the Holy Spirit to speak, and for God’s light to illuminate our path. It's in these moments that we truly begin to think with God.</p>
+                    <p>As <strong class="text-seed-medium-green">Psalm 46:10</strong> says, "Be still, and know that I am God." This isn't just about physical quiet, but an inner stillness that allows us to perceive God's presence and guidance.</p>
+                    <p>Often, we rush through life, filling every moment with noise and activity. But the soul needs tending, and tending requires time. <em>It takes time to tend to a soul.</em> This practice of light and stillness helps us slow down, fostering a deeper connection with Christ.</p>
+                    <h3>Cultivating a Vision for Your Thought Life</h3>
+                    <p>Our thoughts shape our hearts and lives. What we dwell on, we become. This is why <strong class="text-seed-medium-green">Proverbs 4:23</strong> urges us, "Above all else, guard your heart, for everything you do flows from it." By intentionally focusing on thoughts that align with God's truth, we invite transformation.</p>
+                    <p>Becoming like Jesus means thinking like Him, loving like Him, and living like Him. This process isn't about rote memorization, but about deep, Spirit-led meditation that reshapes our inner world.</p>
+                    <h4>Try this passage in Seed:</h4>
+                    <p><strong class="text-seed-medium-green">Psalm 1:2-3 (NIV):</strong> "but whose delight is in the law of the Lord, and who meditates on his law day and night. That person is like a tree planted by streams of water, which yields its fruit in season and whose leaf does not wither—whatever they do prospers."</p>
+                `,
+                scripture: ['Psalm 46:10', 'Proverbs 4:23', 'Psalm 1:2-3']
+            },
+            {
+                id: '2',
+                title: 'Movement & Grace: Living Out Love',
+                category: 'Movement & Grace',
+                date: 'June 15, 2025',
+                excerpt: 'Explore how spiritual formation extends beyond meditation into active expressions of grace and love in your daily life.',
+                content: `
+                    <p>Spiritual formation isn't just about what happens within us, but also how it flows out of us. It's a dynamic interplay of inner transformation and outer expression. This is where "Movement & Grace" comes into play – taking the truths we meditate on and living them out with intentionality.</p>
+                    <p><strong class="text-seed-medium-green">James 1:22</strong> reminds us, "Do not merely listen to the word, and so deceive yourselves. Do what it says." Our faith is not passive; it compels us to action, guided by the Holy Spirit.</p>
+                    <p>The journey of becoming like Jesus is one of continuous growth, where our thoughts, words, and deeds increasingly reflect His character. This requires grace – both the grace we receive and the grace we extend to others. <em>It takes time to tend to a soul</em>, shaping us into vessels of God's love.</p>
+                    <h3>From Meditation to Action</h3>
+                    <p>When we deeply think with God about His commands to love, serve, and forgive, our hearts are softened and our wills aligned. This meditation naturally leads to a desire to act in grace, showing compassion and mercy to those around us.</p>
+                    <p><strong class="text-seed-medium-green">1 John 4:7-8</strong> states, "Dear friends, let us love one another, for love comes from God. Everyone who loves has been born of God and knows God. Whoever does not love does not know God, because God is love." This is the ultimate fruit of a life rooted in Christ.</p>
+                    <p>By consciously choosing to live rooted in His love, we embody the vision for our thought life – a mind focused on Christ, resulting in a heart overflowing with love for others.</p>
+                    <h4>Try this passage in Seed:</h4>
+                    <p><strong class="text-seed-medium-green">Colossians 3:12-14 (NIV):</strong> "Therefore, as God’s chosen people, holy and dearly loved, clothe yourselves with compassion, kindness, humility, gentleness and patience. Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you. And over all these virtues put on love, which binds them all together in perfect unity."</p>
+                `,
+                scripture: ['James 1:22', '1 John 4:7-8', 'Colossians 3:12-14']
+            },
+            {
+                id: '3',
+                title: 'The Pathway to Transformation',
+                category: 'Transformation',
+                date: 'June 10, 2025',
+                excerpt: 'Understanding that true change comes from the renewing of the mind and an ongoing relationship with God.',
+                content: `
+                    <p>Transformation isn't a one-time event, but a lifelong journey of becoming. It's a continuous process where our inner being is reshaped by the Holy Spirit as we engage with God's Word. This is the core of spiritual formation: allowing God to make us new.</p>
+                    <p>The Apostle Paul, in <strong class="text-seed-medium-green">Romans 12:2</strong>, urges us, "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will." This transformation begins with our thoughts.</p>
+                    <p>For true change, we must slow down and think with God. It's not about quick fixes or superficial adjustments, but a deep, fundamental shift in who we are. <em>It takes time to tend to a soul</em>, and patience is key on this pathway.</p>
+                    <h3>A Vision for a Renewed Mind</h3>
+                    <p>Our thought life is the battleground and the blueprint for our transformation. When we meditate on Scripture, we invite God to challenge our old ways of thinking and replace them with His truth. This proactive approach to our minds is vital for spiritual health.</p>
+                    <p><strong class="text-seed-medium-green">Philippians 4:8</strong> provides a beautiful framework: "Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable—if anything is excellent or praiseworthy—think about such things." When we fill our minds with these things, we become more like Christ.</p>
+                    <p>The Seed app helps you intentionally cultivate these thoughts, leading you closer to the image of Jesus, step by step.</p>
+                    <h4>Try this passage in Seed:</h4>
+                    <p><strong class="text-seed-medium-green">2 Corinthians 3:18 (NIV):</strong> "And we all, who with unveiled faces contemplate the Lord’s glory, are being transformed into his image with ever-increasing glory, which comes from the Lord, who is the Spirit."</p>
+                `,
+                scripture: ['Romans 12:2', 'Philippians 4:8', '2 Corinthians 3:18']
+            }
+        ];
+
+        // Mock passage data for the app (simulating a backend API or a large JSON file)
+        const scriptureData = {
+            "Philippians 4:8": {
+                fullText: "Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable—if anything is excellent or praiseworthy—think about such things.",
+                verses: [
+                    "Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable—",
+                    "if anything is excellent or praiseworthy—think about such things."
+                ]
+            },
+            "Psalm 1:1-2": { // Added for the landing page new content
+                fullText: "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers, but whose delight is in the law of the Lord, and who meditates on his law day and night.",
+                verses: [
+                    "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers,",
+                    "but whose delight is in the law of the Lord, and who meditates on his law day and night."
+                ]
+            },
+            "Mark 4:26-29": { // Added for the landing page new content
+                fullText: "He also said, “This is what the kingdom of God is like. A man scatters seed on the ground. Night and day, whether he sleeps or gets up, the seed sprouts and grows, though he does not know how. All by itself the soil produces grain—first the stalk, then the head, then the full kernel in the head.”",
+                verses: [
+                    "He also said, “This is what the kingdom of God is like. A man scatters seed on the ground.",
+                    "Night and day, whether he sleeps or gets up, the seed sprouts and grows, though he does not know how.",
+                    "All by itself the soil produces grain—first the stalk, then the head, then the full kernel in the head.”"
+                ]
+            },
+            "Ephesians 5:26": { // Added for the landing page new content
+                fullText: "to make her holy, cleansing her by the washing with water through the word,",
+                verses: [
+                    "to make her holy, cleansing her by the washing with water through the word,"
+                ]
+            },
+            "Psalm 1:2-3": {
+                fullText: "but whose delight is in the law of the Lord, and who meditates on his law day and night. That person is like a tree planted by streams of water, which yields its fruit in season and whose leaf does not wither—whatever they do prospers.",
+                verses: [
+                    "but whose delight is in the law of the Lord, and who meditates on his law day and night.",
+                    "That person is like a tree planted by streams of water, which yields its fruit in season and whose leaf does not wither—whatever they do prospers."
+                ]
+            },
+            "Colossians 3:12-14": {
+                fullText: "Therefore, as God’s chosen people, holy and dearly loved, clothe yourselves with compassion, kindness, humility, gentleness and patience. Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you. And over all these virtues put on love, which binds them all together in perfect unity.",
+                verses: [
+                    "Therefore, as God’s chosen people, holy and dearly loved, clothe yourselves with compassion, kindness, humility, gentleness and patience.",
+                    "Bear with each other and forgive one another if any of you has a grievance against someone.",
+                    "Forgive as the Lord forgave you.",
+                    "And over all these virtues put on love, which binds them all together in perfect unity."
+                ]
+            },
+            "John 3:16": {
+                fullText: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+                verses: [
+                    "For God so loved the world that he gave his one and only Son,",
+                    "that whoever believes in him shall not perish but have eternal life."
+                ]
+            },
+            "Romans 8:28": {
+                fullText: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+                verses: [
+                    "And we know that in all things God works for the good of those who love him,",
+                    "who have been called according to his purpose."
+                ]
+            }
+            // Add more scripture references as needed for testing or expansion
+        };
+
+        // App state, simulating JSON storage
+        let appData = {
+            currentPassage: null, // Stores { reference: "...", fullText: "...", verses: [...] }
+            memorizedVerses: [],  // Array of booleans, true if memorized
+            targetDate: null,     // Date object
+            startDate: null,      // Date object
+            dailyVersesGoal: 0,
+            currentVerseIndex: 0, // Index of the verse currently being worked on
+            youVersionBaseUrl: "https://www.bible.com/bible/1/", // NIV translation ID on YouVersion
+        };
+
+        // --- Utility Functions ---
+
+        // Function to show a specific page section and hide others
+        function showSection(sectionId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('animate-fade-in'); // Remove animation class
+            });
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
+                activeSection.classList.add('animate-fade-in'); // Add animation class for transition
+                window.scrollTo(0, 0); // Scroll to top when changing sections
+            }
+            // If navigating to blog, ensure list is shown
+            if (sectionId === 'blog') {
+                document.getElementById('blog-post-list').classList.remove('hidden');
+                document.getElementById('full-blog-post').classList.add('hidden');
+            }
+            // If navigating to app, ensure progress display is correct
+            if (sectionId === 'app') {
+                updateAppUI();
+            }
+        }
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuDropdown.classList.toggle('hidden');
+            });
+        }
+
+        // Function to hide mobile menu
+        function hideMobileMenu() {
+            mobileMenuDropdown.classList.add('hidden');
+        }
+
+        // --- Landing Page Logic (No specific JS beyond section navigation) ---
+
+        // --- Blog Page Logic ---
+        const blogPostList = document.getElementById('blog-post-list');
+        const fullBlogPost = document.getElementById('full-blog-post');
+        const backToBlogListBtn = document.getElementById('back-to-blog-list');
+        const blogFilterButtons = document.querySelectorAll('.blog-filter-btn');
+
+        // Function to render blog post cards
+        function renderBlogPosts(filterCategory = 'all') {
+            blogPostList.innerHTML = ''; // Clear existing posts
+            const filteredPosts = blogPosts.filter(post =>
+                filterCategory === 'all' || post.category === filterCategory
+            );
+
+            if (filteredPosts.length === 0) {
+                blogPostList.innerHTML = `<p class="col-span-full text-center text-seed-dark-green text-xl py-8">No posts found in this category.</p>`;
+                return;
+            }
+
+            filteredPosts.forEach(post => {
+                const postCard = `
+                    <div class="bg-seed-light-yellow p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer" data-post-id="${post.id}">
+                        <span class="text-seed-medium-green text-sm font-semibold">${post.category}</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-seed-dark-green">${post.title}</h3>
+                        <p class="text-sm text-seed-light-olive mb-4">${post.excerpt}</p>
+                        <button class="mt-4 text-seed-medium-green hover:text-seed-dark-green font-semibold text-sm">Read More <i class="fas fa-arrow-right ml-1 text-xs"></i></button>
+                    </div>
+                `;
+                blogPostList.insertAdjacentHTML('beforeend', postCard);
+            });
+
+            // Add event listeners to newly rendered cards
+            document.querySelectorAll('#blog-post-list > div').forEach(card => {
+                card.addEventListener('click', (event) => {
+                    const postId = card.dataset.postId;
+                    displayFullBlogPost(postId);
+                });
+            });
+        }
+
+        // Function to display a full blog post
+        function displayFullBlogPost(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-date').innerText = post.date;
+            document.getElementById('post-category').innerText = post.category;
+            document.getElementById('post-content').innerHTML = post.content;
+
+            blogPostList.classList.add('hidden');
+            fullBlogPost.classList.remove('hidden');
+            window.scrollTo(0, 0); // Scroll to top when viewing full post
+        }
+
+        // Event listener for back button in full blog post view
+        if (backToBlogListBtn) {
+            backToBlogListBtn.addEventListener('click', () => {
+                fullBlogPost.classList.add('hidden');
+                blogPostList.classList.remove('hidden');
+                window.scrollTo(0, 0); // Scroll to top when going back to list
+            });
+        }
+
+        // Event listeners for blog filter buttons
+        blogFilterButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const category = event.target.dataset.category;
+                renderBlogPosts(category);
+                // Highlight active filter button
+                blogFilterButtons.forEach(btn => btn.classList.remove('bg-seed-dark-green', 'text-seed-off-white'));
+                event.target.classList.add('bg-seed-dark-green', 'text-seed-off-white');
+            });
+        });
+
+
+        // --- App Page Logic ---
+        const passageInput = document.getElementById('passage-input');
+        const loadPassageBtn = document.getElementById('load-passage-btn');
+        const passageError = document.getElementById('passage-error');
+
+        const targetDateInput = document.getElementById('target-date-input');
+        const setGoalBtn = document.getElementById('set-goal-btn');
+        const dateError = document.getElementById('date-error');
+
+        const progressDisplay = document.getElementById('progress-display');
+        const currentPassageRef = document.getElementById('current-passage-ref');
+        const progressBar = document.getElementById('progress-bar');
+        const percentageComplete = document.getElementById('percentage-complete');
+        const versesMemorizedCount = document.getElementById('verses-memorized-count');
+        const totalVersesCount = document.getElementById('total-verses-count');
+        const daysLeftCount = document.getElementById('days-left-count');
+        const dailyVersesGoalDisplay = document.getElementById('daily-verses-goal');
+
+        const currentVerseDisplay = document.getElementById('current-verse-display');
+        const fullPassageDisplay = document.getElementById('full-passage-display');
+
+        const markMemorizedBtn = document.getElementById('mark-memorized-btn');
+        const practiceVerseBtn = document.getElementById('practice-verse-btn');
+        const revertVerseBtn = document.getElementById('revert-verse-btn');
+
+        const practiceExercisesContainer = document.getElementById('practice-exercises');
+        const exerciseBtns = document.querySelectorAll('.exercise-btn');
+        const exerciseArea = document.getElementById('exercise-area');
+        const exerciseFeedback = document.getElementById('exercise-feedback');
+
+        const youVersionLink = document.getElementById('youversion-link');
+
+
+        // Function to load scripture passage
+        if (loadPassageBtn) {
+            loadPassageBtn.addEventListener('click', () => {
+                const reference = passageInput.value.trim();
+                if (!reference) {
+                    passageError.classList.remove('hidden');
+                    return;
+                }
+                passageError.classList.add('hidden');
+
+                const passage = scriptureData[reference];
+                if (passage) {
+                    appData.currentPassage = { ...passage, reference: reference };
+                    appData.memorizedVerses = new Array(passage.verses.length).fill(false);
+                    appData.currentVerseIndex = 0;
+                    appData.startDate = new Date(); // Set start date to today when passage is loaded
+                    updateAppUI();
+                } else {
+                    passageError.textContent = "Passage not found. Please try another (e.g., Philippians 4:8, John 3:16, Romans 8:28, Psalm 1:1-2, Mark 4:26-29, Ephesians 5:26).";
+                    passageError.classList.remove('hidden');
+                    appData.currentPassage = null;
+                    appData.memorizedVerses = [];
+                    appData.dailyVersesGoal = 0;
+                    updateAppUI();
+                }
+            });
+        }
+
+        // Function to set target date and calculate daily goal
+        if (setGoalBtn) {
+            setGoalBtn.addEventListener('click', () => {
+                const targetDateStr = targetDateInput.value;
+                if (!targetDateStr) {
+                    dateError.textContent = "Please select a target date.";
+                    dateError.classList.remove('hidden');
+                    return;
+                }
+
+                const target = new Date(targetDateStr);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalize today's date
+
+                if (target < today) {
+                    dateError.textContent = "Target date must be in the future.";
+                    dateError.classList.remove('hidden');
+                    return;
+                }
+                dateError.classList.add('hidden');
+
+                appData.targetDate = target;
+                if (!appData.startDate) {
+                    appData.startDate = today; // If not set by loading passage, set now
+                }
+
+                if (appData.currentPassage) {
+                    const totalVerses = appData.currentPassage.verses.length;
+                    const daysDiff = Math.ceil((appData.targetDate - appData.startDate) / (1000 * 60 * 60 * 24)); // Days difference
+                    appData.dailyVersesGoal = daysDiff > 0 ? Math.ceil(totalVerses / daysDiff) : totalVerses; // At least one verse if target is today
+                }
+                updateAppUI();
+            });
+        }
+
+        // Function to update the App UI based on appData
+        function updateAppUI() {
+            if (!appData.currentPassage) {
+                progressDisplay.classList.add('hidden');
+                currentVerseDisplay.innerHTML = `<p>No passage loaded. Enter a Scripture reference above.</p>`;
+                fullPassageDisplay.innerHTML = `<p>Load a passage to see its full text.</p>`;
+                return;
+            }
+
+            progressDisplay.classList.remove('hidden');
+            currentPassageRef.textContent = appData.currentPassage.reference;
+
+            const totalVerses = appData.currentPassage.verses.length;
+            const memorizedCount = appData.memorizedVerses.filter(v => v).length;
+            const percentage = totalVerses > 0 ? (memorizedCount / totalVerses) * 100 : 0;
+
+            progressBar.style.width = `${percentage}%`;
+            percentageComplete.textContent = `${Math.round(percentage)}%`;
+            versesMemorizedCount.textContent = memorizedCount;
+            totalVersesCount.textContent = totalVerses;
+            dailyVersesGoalDisplay.textContent = appData.dailyVersesGoal;
+
+            // Calculate days left
+            let daysLeft = 0;
+            if (appData.targetDate && appData.startDate) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                daysLeft = Math.max(0, Math.ceil((appData.targetDate - today) / (1000 * 60 * 60 * 24)));
+            }
+            daysLeftCount.textContent = daysLeft;
+
+
+            // Display current verse
+            if (appData.currentVerseIndex < totalVerses) {
+                currentVerseDisplay.innerHTML = `<p>${appData.currentPassage.verses[appData.currentVerseIndex]}</p>`;
+            } else {
+                currentVerseDisplay.innerHTML = `<p>All verses memorized! Congratulations!</p>`;
+            }
+
+            // Display full passage with memorized verses grayed out
+            fullPassageDisplay.innerHTML = '';
+            appData.currentPassage.verses.forEach((verse, index) => {
+                const span = document.createElement('span');
+                span.textContent = verse + (index < totalVerses - 1 ? ' ' : ''); // Add space between verses
+                if (appData.memorizedVerses[index]) {
+                    span.classList.add('text-gray-500', 'line-through'); // Gray out and strike through memorized
+                } else if (index === appData.currentVerseIndex) {
+                    span.classList.add('font-semibold', 'text-seed-medium-green', 'bg-seed-pale-yellow', 'rounded-md', 'px-1'); // Highlight current
+                }
+                fullPassageDisplay.appendChild(span);
+            });
+
+
+            // Update YouVersion link
+            if (appData.currentPassage && appData.currentPassage.reference) {
+                const formattedRef = appData.currentPassage.reference.replace(/\s/g, '').replace(/:/g, '.');
+                youVersionLink.href = `${appData.youVersionBaseUrl}${formattedRef}`;
+                youVersionLink.classList.remove('hidden');
+            } else {
+                youVersionLink.classList.add('hidden');
+            }
+
+            // Show/hide practice exercises
+            if (appData.currentPassage && totalVerses > 0 && memorizedCount < totalVerses) {
+                practiceExercisesContainer.classList.remove('hidden');
+            } else {
+                practiceExercisesContainer.classList.add('hidden');
+            }
+            exerciseArea.innerHTML = 'Select an exercise to begin.';
+            exerciseFeedback.textContent = '';
+        }
+
+        // Mark Memorized
+        if (markMemorizedBtn) {
+            markMemorizedBtn.addEventListener('click', () => {
+                if (appData.currentPassage && appData.currentVerseIndex < appData.currentPassage.verses.length) {
+                    appData.memorizedVerses[appData.currentVerseIndex] = true;
+                    // Move to the next unmemorized verse
+                    appData.currentVerseIndex = appData.memorizedVerses.findIndex((isMemorized, index) => !isMemorized && index >= appData.currentVerseIndex);
+                    if (appData.currentVerseIndex === -1) { // If all are memorized, point to last one or just outside
+                        appData.currentVerseIndex = appData.currentPassage.verses.length;
+                    }
+                    updateAppUI();
+                }
+            });
+        }
+
+        // Revert Verse
+        if (revertVerseBtn) {
+            revertVerseBtn.addEventListener('click', () => {
+                if (appData.currentPassage && appData.currentVerseIndex >= 0 && appData.currentVerseIndex < appData.currentPassage.verses.length) {
+                    // Find the last memorized verse before the current index, or the current one if it's memorized
+                    let lastMemorizedIndex = appData.currentVerseIndex;
+                    while (lastMemorizedIndex >= 0 && !appData.memorizedVerses[lastMemorizedIndex]) {
+                        lastMemorizedIndex--;
+                    }
+                    if (lastMemorizedIndex >= 0 && appData.memorizedVerses[lastMemorizedIndex]) {
+                        appData.memorizedVerses[lastMemorizedIndex] = false;
+                        appData.currentVerseIndex = lastMemorizedIndex; // Go back to this verse
+                        updateAppUI();
+                    } else if (appData.currentVerseIndex > 0 && appData.memorizedVerses[appData.currentVerseIndex - 1]) {
+                        // If current isn't memorized, but previous was
+                        appData.memorizedVerses[appData.currentVerseIndex - 1] = false;
+                        appData.currentVerseIndex = appData.currentVerseIndex - 1;
+                        updateAppUI();
+                    } else if (appData.memorizedVerses[0]) {
+                        // If only the first verse is memorized and we are on it or beyond
+                        appData.memorizedVerses[0] = false;
+                        appData.currentVerseIndex = 0;
+                        updateAppUI();
+                    }
+                }
+            });
+        }
+
+
+        // Practice Exercises
+        let currentPracticeVerse = '';
+        let currentExerciseType = '';
+
+        exerciseBtns.forEach(button => {
+            button.addEventListener('click', (event) => {
+                if (!appData.currentPassage || appData.currentVerseIndex >= appData.currentPassage.verses.length) {
+                    exerciseArea.innerHTML = 'Please select a passage and ensure there are verses to practice.';
+                    exerciseFeedback.textContent = '';
+                    return;
+                }
+
+                currentExerciseType = event.target.dataset.exercise;
+                currentPracticeVerse = appData.currentPassage.verses[appData.currentVerseIndex];
+                exerciseFeedback.textContent = '';
+                initializeExercise(currentExerciseType, currentPracticeVerse);
+            });
+        });
+
+        function initializeExercise(type, verse) {
+            exerciseArea.innerHTML = ''; // Clear previous exercise
+            switch (type) {
+                case 'first-letter':
+                    exerciseArea.innerHTML = `<p class="text-xl font-mono tracking-widest text-seed-medium-green mb-4">${verse.split(' ').map(word => word[0] || '').join(' ')}</p>
+                                              <p class="text-sm text-seed-dark-green">Say the verse aloud using only the first letters as prompts.</p>`;
+                    break;
+                case 'word-for-word':
+                    const words = verse.split(' ').filter(w => w.trim() !== '');
+                    let wordIndex = 0;
+                    const displayWord = () => {
+                        if (wordIndex < words.length) {
+                            exerciseArea.innerHTML = `<p class="text-2xl font-bold text-seed-dark-green mb-4">${words[wordIndex]}</p>
+                                                      <p class="text-sm text-seed-medium-green">Recall the next word in the verse.</p>
+                                                      <button id="next-word-btn" class="mt-4 bg-seed-medium-green text-seed-off-white px-6 py-2 rounded-full hover:bg-seed-dark-green transition duration-300">Next Word</button>`;
+                            document.getElementById('next-word-btn').onclick = () => {
+                                wordIndex++;
+                                displayWord();
+                            };
+                        } else {
+                            exerciseArea.innerHTML = `<p class="text-xl text-seed-medium-green">Exercise Complete!</p>`;
+                        }
+                    };
+                    displayWord();
+                    break;
+                case 'type-first-letter':
+                    const firstLetters = verse.split(' ').map(word => word[0] || '').join('');
+                    exerciseArea.innerHTML = `<p class="text-sm text-seed-dark-green mb-2">Type the first letter of each word:</p>
+                                              <input type="text" id="type-first-letter-input" class="w-full p-3 border border-seed-pale-yellow rounded-lg focus:outline-none focus:ring-2 focus:ring-seed-medium-green text-seed-dark-green bg-seed-off-white text-lg font-mono" placeholder="Type here...">
+                                              <button id="check-type-btn" class="mt-4 bg-seed-medium-green text-seed-off-white px-6 py-2 rounded-full hover:bg-seed-dark-green transition duration-300">Check</button>`;
+                    document.getElementById('check-type-btn').onclick = () => {
+                        const userInput = document.getElementById('type-first-letter-input').value.trim();
+                        if (userInput.toLowerCase() === firstLetters.toLowerCase()) {
+                            exerciseFeedback.className = 'mt-4 text-center font-semibold text-green-600';
+                            exerciseFeedback.textContent = 'Correct! Well done.';
+                        } else {
+                            exerciseFeedback.className = 'mt-4 text-center font-semibold text-red-600';
+                            exerciseFeedback.textContent = `Incorrect. Expected: "${firstLetters}"`;
+                        }
+                    };
+                    document.getElementById('type-first-letter-input').focus();
+                    break;
+                default:
+                    exerciseArea.innerHTML = 'Select an exercise to begin.';
+            }
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('home'); // Show home page by default
+            renderBlogPosts(); // Render all blog posts initially
+            // Set min date for target date input to today
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
+            const day = today.getDate().toString().padStart(2, '0');
+            targetDateInput.min = `${year}-${month}-${day}`;
+        });
+
+    </script>
+</body>
+
+</html>
