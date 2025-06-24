@@ -16,6 +16,14 @@
         .custom-gradient-bg {
             background: linear-gradient(to bottom, #34403a, #285238);
         }
+        /* Reversed gradient for homepage hero */
+        .reversed-gradient-home {
+            background: linear-gradient(to top, #34403a, #285238);
+        }
+        /* Footer gradient (swapped with home) */
+        .footer-gradient {
+            background: linear-gradient(to bottom, #34403a, #285238);
+        }
         /* Custom Tailwind Configuration for colors and font */
         html {
             scroll-behavior: smooth;
@@ -105,7 +113,7 @@
         <nav class="container mx-auto flex justify-between items-center px-4">
             <!-- Logo - Home Button -->
             <a href="#home" class="flex items-center" onclick="showSection('home')">
-                <img src="https://i.imgur.com/eF4vmiG.png" alt="Seed Logo" class="h-8 rounded-md">
+                <img src="https://i.imgur.com/zGfOR1S.png" alt="Seed logo" class="h-8 rounded-md">
             </a>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden focus:outline-none">
@@ -140,7 +148,7 @@
     <main class="flex-grow">
         <!-- Landing Page Section -->
         <section id="home" class="page-section animate-fade-in">
-          <section class="custom-gradient-bg flex flex-col md:flex-row items-center py-16 px-6 md:px-16">
+          <section class="footer-gradient flex flex-col md:flex-row items-center py-16 px-6 md:px-16">
             <div class="md:w-1/2 text-center md:text-left">
               <h1 class="text-4xl md:text-5xl font-bold text-seed-off-white mb-4">
                 Slow down. Think with God. Live rooted.
@@ -148,7 +156,7 @@
               <p class="text-lg md:text-xl text-seed-off-white opacity-90">
                 Seed is a simple tool that helps you slow down and spend time with God. Choose a passage. Set a pace. Practice daily.
               </p>
-              <a href="/app" class="mt-6 inline-block bg-seed-medium-green text-white font-semibold px-6 py-3 rounded hover:bg-seed-dark-green transition">
+              <a href="/app" class="mt-6 inline-block bg-[#fff3bf] text-[#34403a] font-semibold px-6 py-3 rounded hover:bg-[#94a37c] transition">
                 Start Your Plan
               </a>
             </div>
@@ -318,7 +326,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="custom-gradient-bg text-[#fff3bf] bg-seed-dark-green text-seed-off-white text-center p-8 mt-12 rounded-t-3xl shadow-lg">
+    <footer class="reversed-gradient-home text-[#fff3bf] bg-seed-dark-green text-seed-off-white text-center p-8 mt-12 t-3xl shadow-lg">
         <div class="container mx-auto">
             <img src="https://i.imgur.com/hMPdDWB.png" alt="Seed PWA Icon" class="h-10 mx-auto mb-4 rounded-md">
             <!-- Brandmark below icon -->
