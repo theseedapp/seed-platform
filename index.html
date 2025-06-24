@@ -136,45 +136,17 @@
     <main class="flex-grow">
         <!-- Landing Page Section -->
         <section id="home" class="page-section container mx-auto px-4 py-12 md:py-20 animate-fade-in">
-            <!-- HERO - Original Layout, new Problem Statement -->
-            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16 mb-16 md:mb-24">
-                <!-- Hero Image -->
-                <div class="md:w-1/2 mb-8 md:mb-0 relative">
-                  <img src="https://i.imgur.com/E05BhUh.jpeg" alt="Hero Image" class="w-full object-cover rounded-2xl shadow-lg" />
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <h1 class="text-center text-2xl md:text-4xl font-bold text-[#fff3bf] drop-shadow-lg">
-                      Slow Down. Think with God. Live rooted.
-                    </h1>
-                  </div>
-                </div>
-                <!-- Text Content -->
-                <div class="md:w-1/2 text-center md:text-left">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight text-seed-dark-green">
-                        <span class="block">Slow down.</span>
-                        <span class="block">Think with God.</span>
-                        <span class="block text-seed-medium-green">Live rooted.</span>
-                    </h1>
-                    <p class="text-lg md:text-xl mb-4 text-seed-dark-green max-w-xl mx-auto md:mx-0">
-                        You want to become more like Jesus. But modern life pulls you in every direction.
-                    </p>
-                    <p class="text-lg md:text-xl mb-4 text-seed-dark-green max-w-xl mx-auto md:mx-0">
-                        You’re hungry for transformation—not just information.<br>
-                        You’re not trying to win a Bible quiz.<br>
-                        You want to become a person of love.
-                    </p>
-                    <p class="text-lg md:text-xl mb-8 text-seed-dark-green max-w-xl mx-auto md:mx-0">
-                        But even with the best intentions, it’s hard to know where to start.<br>
-                        How do you move from knowing Scripture to being shaped by it?
-                    </p>
-                    <!-- Call to Action Buttons -->
-                    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                        <a href="/app"
-                            class="bg-seed-medium-green text-seed-off-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-seed-dark-green transition-all duration-300 shadow-lg flex items-center justify-center space-x-2">
-                            <i class="fas fa-seedling text-xl"></i>
-                            <span>Get Started</span>
-                        </a>
-                    </div>
-                </div>
+            <!-- HERO - Refactored Layout: Flex container with text left, image right -->
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 p-4">
+                <h1 class="text-2xl md:text-4xl font-bold text-[#fff3bf] mb-4">
+                  Slow Down. Think with God. Live rooted.
+                </h1>
+                <!-- You can add more supporting text or CTA buttons here -->
+              </div>
+              <div class="md:w-1/2">
+                <img src="https://i.imgur.com/E05BhUh.jpeg" alt="Hero Image" class="w-full object-cover rounded" />
+              </div>
             </div>
             <!-- FEATURES -->
             <div id="meet-seed-features" class="mt-16 md:mt-24 text-center">
