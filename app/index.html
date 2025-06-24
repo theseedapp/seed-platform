@@ -229,7 +229,7 @@
 
             <!-- Seed Plan Heading -->
           <h2 class="text-2xl font-semibold mb-4 flex items-center justify-center space-x-2 text-center">
-              <span>Memorization Plan</span>
+              <span>Meditation Plan</span>
             </h2>
 
             <!-- Progress & Memorization Section -->
@@ -279,6 +279,9 @@
                     >
                       <img src="https://i.imgur.com/26XfGSP.png" alt="Seed Icon" class="w-5 h-5 mr-2">
                       Seed Planted
+                    </button>
+                    <button id="undo-seed-btn" class="ml-4 px-4 py-2 text-seed-dark-green bg-transparent rounded hover:bg-seed-dark-green hover:text-seed-off-white transition">
+                      Undo
                     </button>
                 </div>
             </section>
@@ -514,6 +517,29 @@
 
         // App State
         let plan = {};
+        
+        // --- Plan Setup: Start Plan Button Handler ---
+        startPlanButton.addEventListener("click", () => {
+            // Use selected passage, not free text
+            const passage = passageSelect.value.trim();
+            const targetDateInput = targetDateInput.value;
+            const [year, month, day] = targetDateInput.split('-').map(Number);
+            const targetDate = new Date(year, month - 1, day);
+
+            if (!passage || isNaN(targetDate)) {
+                setupError.textContent = "Please select a passage and a valid target date.";
+                return;
+            }
+
+            const plan = {
+                passage,
+                targetDate: targetDate.toISOString().split("T")[0],
+                completedVerses: []
+            };
+
+            localStorage.setItem("memorizationPlan", JSON.stringify(plan));
+            location.reload();
+        });
         
         // --- Preloaded Scripture Data ---
         // NOTE: This object now contains the FULL text for all passages.
@@ -915,3 +941,17 @@
     </script>
 </body>
 </html>
+        // --- Undo Seed Button Logic ---
+        document.addEventListener('DOMContentLoaded', function () {
+          const undoBtn = document.getElementById("undo-seed-btn");
+          if (undoBtn) {
+            undoBtn.addEventListener("click", function () {
+              const today = getTodayDate();
+              if (plan && Array.isArray(plan.completedVerses) && plan.completedVerses.includes(today)) {
+                plan.completedVerses = plan.completedVerses.filter(date => date !== today);
+                savePlan(plan);
+                updateProgressDisplay();
+              }
+            });
+          }
+        });
