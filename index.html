@@ -75,6 +75,22 @@
         .animate-fade-in {
             animation: fade-in 0.6s ease-out forwards;
         }
+
+        /* Style for #searchInput to match dropdown/date input design */
+        #searchInput {
+            background-color: #d4d3a9;
+            color: #34403a;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #searchInput::placeholder {
+            color: #808060;
+        }
     </style>
     <script>
         // Tailwind CSS custom configuration
@@ -323,6 +339,21 @@
         </section>
 
         <!-- App Page Section (removed from landing page) -->
+        <!-- Example App Page Section Buttons (for demonstration only) -->
+        <!--
+        <div class="flex items-center gap-3 mt-4">
+          <button id="complete-today"
+                  class="bg-seed-yellow text-seed-dark-green px-4 py-2 rounded-full font-semibold flex items-center hover:bg-seed-dark-green hover:text-white transition-all duration-300">
+            <img src="https://i.imgur.com/26XfGSP.png" alt="Seed Icon" class="h-5 w-5 mr-2">
+            <span>Seed Planted</span>
+          </button>
+          <button id="undoVerseButton"
+                  class="text-sm text-seed-dark-green hover:text-seed-medium-green px-3 py-2 rounded transition hidden"
+                  onclick="undoLastVerse()">
+            Undo
+          </button>
+        </div>
+        -->
     </main>
 
     <!-- Footer -->

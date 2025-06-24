@@ -517,6 +517,7 @@
 
         // App State
         let plan = {};
+        let versesAddedToday = 0;   // tracks how many verses were just marked complete
         
         // --- Plan Setup: Start Plan Button Handler ---
         startPlanButton.addEventListener("click", () => {
@@ -542,16 +543,6 @@
         });
         
         // --- Preloaded Scripture Data ---
-        // --- Undo Seed Button Handler ---
-        document.getElementById("undo-seed-btn").addEventListener("click", function () {
-          const today = getTodayDate();
-          const index = plan.completedVerses.indexOf(today);
-          if (index !== -1) {
-            plan.completedVerses.splice(index, 1);
-            savePlan(plan);
-            updateProgressDisplay();
-          }
-        });
         // NOTE: This object now contains the FULL text for all passages.
         const preloadedPassages = {
             "Genesis 1:28": { name: "Genesis 1:28", translation: "AMPC", verses: [{ verse: 28, text: `And God blessed them and said to them, Be fruitful, multiply, and fill the earth, and subdue it [using all its vast resources in the service of God and man]; and have dominion over the fish of the sea, the birds of the air, and over every living creature that moves upon the earth.` }] },
@@ -815,6 +806,18 @@
             const versesPerDay = Math.ceil(remainingVerses / daysLeft);
 
             plan.progress = Math.min(totalVerses, versesDone + versesPerDay);
+            versesAddedToday = versesPerDay;   // remember what we added so we can undo
+            savePlan();
+            updateUI();
+        });
+
+        // --- Undo Seed Button Handler (reverts today's increment) ---
+        document.getElementById('undo-seed-btn').addEventListener('click', () => {
+            if (!plan || !plan.verses || versesAddedToday === 0) return;
+
+            // Roll back the verses we just added, but never below 0
+            plan.progress = Math.max(0, plan.progress - versesAddedToday);
+            versesAddedToday = 0;          // reset tracker
             savePlan();
             updateUI();
         });
@@ -951,17 +954,3 @@
     </script>
 </body>
 </html>
-        // --- Undo Seed Button Logic ---
-        document.addEventListener('DOMContentLoaded', function () {
-          const undoBtn = document.getElementById("undo-seed-btn");
-          if (undoBtn) {
-            undoBtn.addEventListener("click", function () {
-              const today = getTodayDate();
-              if (plan && Array.isArray(plan.completedVerses) && plan.completedVerses.includes(today)) {
-                plan.completedVerses = plan.completedVerses.filter(date => date !== today);
-                savePlan(plan);
-                updateProgressDisplay();
-              }
-            });
-          }
-        });
