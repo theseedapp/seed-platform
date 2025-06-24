@@ -21,6 +21,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* Fix for background gradient bleeding/edge artifacts */
+        .fixed-full-gradient {
+            background: linear-gradient(to bottom, #34403a, #285238);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
         /* Custom color theme based on user request */
         :root {
             --primary-bg: #34403a;
@@ -154,7 +161,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-b from-[#34403a] to-[#285238] min-h-screen antialiased">
+<body class="fixed-full-gradient min-h-screen antialiased">
 
     <!-- App Loader/Spinner -->
     <div id="loader-modal" class="modal hidden">
