@@ -203,26 +203,6 @@
                            <select id="end-verse-select" class="form-input"></select>
                         </div>
                     </div>
-                    <!-- Custom Passage Section -->
-                    <section id="custom-passage-section" class="bg-seed-dark-green text-seed-light-yellow py-8 px-6 rounded-md mt-6">
-                      <h3 class="text-xl font-semibold mb-2">Search Any Passage</h3>
-                      
-                      <input
-                        type="text"
-                        id="passageInput"
-                        class="w-full p-4 rounded-md bg-seed-light-yellow text-seed-dark-green placeholder-seed-dark-green focus:outline-none focus:ring-2 focus:ring-seed-medium-green"
-                        placeholder="e.g. Ephesians 1 or Matthew 7:7–11"
-                      />
-                      
-                      <button
-                        onclick="loadCustomPassage()"
-                        class="bg-seed-yellow hover:bg-seed-dark-green text-seed-dark font-bold py-2 px-4 rounded transition-all"
-                      >
-                        Load Passage
-                      </button>
-
-                      <div id="passagePreview" class="mt-4"></div>
-                    </section>
                     <div>
                         <label for="target-date-input" class="block mb-1 text-sm font-medium">Target Date</label>
                         <input type="date" id="target-date-input" class="form-input">
@@ -295,7 +275,7 @@
                 <div class="flex justify-center mt-6">
                     <button
                       id="mark-complete-button"
-                      class="flex items-center justify-center bg-seed-yellow text-seed-dark-green px-4 py-2 rounded-lg font-semibold hover:bg-seed-dark-green hover:text-white transition-colors duration-300 text-lg hidden"
+                      class="inline-flex items-center bg-seed-yellow text-seed-dark-green font-semibold px-4 py-2 rounded-md shadow-md hover:bg-seed-dark-green hover:text-seed-dark-green transition-colors duration-300 hidden"
                     >
                       <img src="https://i.imgur.com/26XfGSP.png" alt="Seed Icon" class="w-5 h-5 mr-2">
                       Seed Planted
@@ -403,51 +383,8 @@
         </div>
    </footer>
 
-    <script>
-      const API_KEY = '776d13eb1f4517f4721ae9dd477ce67';
-      const BIBLE_ID = 'de4e12af7f28f599-02';
-
-      async function fetchPassage(reference) {
-        const url = `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/passages?reference=${encodeURIComponent(reference)}`;
-        const response = await fetch(url, {
-          headers: {
-            'api-key': API_KEY
-          }
-        });
-        const data = await response.json();
-        return data.data?.content;
-      }
-
-      async function loadCustomPassage() {
-        const ref = document.getElementById('passageInput').value;
-        const content = await fetchPassage(ref);
-        const preview = document.getElementById('passagePreview');
-        if (content) {
-          preview.innerHTML = `
-            <div class="bg-white text-seed-dark-green p-4 rounded shadow">
-              ${content}
-              <button onclick="useThisPassage('${ref}')" class="mt-3 bg-seed-yellow hover:bg-seed-dark-green text-seed-dark font-bold py-2 px-4 rounded transition-all">
-                Use This Passage
-              </button>
-            </div>
-          `;
-        } else {
-          preview.innerHTML = 'Passage not found. Please try again.';
-        }
-      }
-
-      function useThisPassage(ref) {
-        localStorage.setItem('customPassageRef', ref);
-        alert(`Saved "${ref}" as your passage!`);
-      }
-    </script>
     
     <script type="module">
-        // --- Custom Passage Ref Logic (persist custom passage as currentPassage) ---
-        const savedCustomPassage = localStorage.getItem('customPassageRef');
-        if (savedCustomPassage && !localStorage.getItem('currentPassage')) {
-          localStorage.setItem('currentPassage', savedCustomPassage);
-        }
         // === App Version Constant ===
         const APP_VERSION = "2.3.0";
 
