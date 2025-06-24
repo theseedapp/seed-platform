@@ -542,6 +542,16 @@
         });
         
         // --- Preloaded Scripture Data ---
+        // --- Undo Seed Button Handler ---
+        document.getElementById("undo-seed-btn").addEventListener("click", function () {
+          const today = getTodayDate();
+          const index = plan.completedVerses.indexOf(today);
+          if (index !== -1) {
+            plan.completedVerses.splice(index, 1);
+            savePlan(plan);
+            updateProgressDisplay();
+          }
+        });
         // NOTE: This object now contains the FULL text for all passages.
         const preloadedPassages = {
             "Genesis 1:28": { name: "Genesis 1:28", translation: "AMPC", verses: [{ verse: 28, text: `And God blessed them and said to them, Be fruitful, multiply, and fill the earth, and subdue it [using all its vast resources in the service of God and man]; and have dominion over the fish of the sea, the birds of the air, and over every living creature that moves upon the earth.` }] },
