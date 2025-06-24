@@ -1,27 +1,31 @@
+// Hide Undo button on load
 document.getElementById("undo-seed-btn").style.display = "none";
 
+// Handle Undo button click
 document.getElementById("undo-seed-btn").addEventListener("click", function () {
   if (!plan || !plan.completedVerses || plan.completedVerses.length === 0) return;
 
   // Remove the last completed verse
   const removedVerse = plan.completedVerses.pop();
 
+  // Hide the button again after undo
   document.getElementById("undo-seed-btn").style.display = "none";
 
-  // Save and update display
-  savePlan(plan);
-  updateVerseHighlights(); // Ensures visual feedback for removed verse
-  updateProgressDisplay();
-});
-
-// Assuming "Seed Planted" button logic is handled in a function named markVerseComplete or similar
-function markVerseComplete(verse) {
-  // Existing logic to mark verse as complete
-  plan.completedVerses.push(verse);
-
-  document.getElementById("undo-seed-btn").style.display = "inline-block";
-
+  // Save plan and update display
   savePlan(plan);
   updateVerseHighlights();
   updateProgressDisplay();
+});
+
+// Mark current verse complete
+function markVerseComplete(verse) {
+  if (!plan.completedVerses.includes(verse)) {
+    plan.completedVerses.push(verse);
+    savePlan(plan);
+    updateVerseHighlights();
+    updateProgressDisplay();
+
+    // Show Undo button
+    document.getElementById("undo-seed-btn").style.display = "inline-block";
+  }
 }
