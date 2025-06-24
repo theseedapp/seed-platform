@@ -12,6 +12,10 @@
     <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Custom gradient background utility */
+        .custom-gradient-bg {
+            background: linear-gradient(to bottom, #34403a, #285238);
+        }
         /* Custom Tailwind Configuration for colors and font */
         html {
             scroll-behavior: smooth;
@@ -136,7 +140,7 @@
     <main class="flex-grow">
         <!-- Landing Page Section -->
         <section id="home" class="page-section animate-fade-in">
-          <section class="flex flex-col md:flex-row items-center bg-seed-dark-green py-16 px-6 md:px-16">
+          <section class="custom-gradient-bg flex flex-col md:flex-row items-center py-16 px-6 md:px-16">
             <div class="md:w-1/2 text-center md:text-left">
               <h1 class="text-4xl md:text-5xl font-bold text-seed-off-white mb-4">
                 Slow down. Think with God. Live rooted.
@@ -314,7 +318,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-seed-dark-green text-seed-off-white text-center p-8 mt-12 rounded-t-3xl shadow-lg">
+    <footer class="custom-gradient-bg text-[#fff3bf] bg-seed-dark-green text-seed-off-white text-center p-8 mt-12 rounded-t-3xl shadow-lg">
         <div class="container mx-auto">
             <img src="https://i.imgur.com/hMPdDWB.png" alt="Seed PWA Icon" class="h-10 mx-auto mb-4 rounded-md">
             <!-- Brandmark below icon -->
