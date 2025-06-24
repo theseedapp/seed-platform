@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Seed App">
     <title>Seed</title>
     
     <!-- PWA and Favicon Links -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="https://i.imgur.com/g9J1Y1Q.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/g9J1Y1Q.png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
 
     <!-- Tailwind CSS & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -266,10 +269,11 @@
                 <div class="flex justify-center mt-4">
                     <a id="youversion-today-button"
                        href="#"
-                       target="_blank"
-                       rel="noopener noreferrer"
+                       onclick="openYouVersionApp(this.dataset.deepLink, this.dataset.webLink)"
+                       data-deep-link=""
+                       data-web-link=""
                        class="font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 text-base border border-gray-800 hover:bg-gray-800 hover:text-white"
-                       style="background-color: transparent; color: #94a37c;">
+                       style="background-color: transparent; color: #1f2937;">
                        Open Today in YouVersion
                     </a>
                 </div>
@@ -427,10 +431,18 @@
                 // Try to extract first chapter number from passage.name (e.g. "Matthew 5–7" => 5, "Psalm 23" => 23)
                 let match = passage.name.match(/\d+/);
                 let chapter = match ? match[0] : "1";
-                youVersionLink.href = `https://www.bible.com/bible/111/${encodeURIComponent(abbr)}.${chapter}.NIV`;
+                // Build deep link and web link for YouVersion
+                const deepLink = `youversion://bible/111/${encodeURIComponent(abbr)}.${chapter}.1`;
+                const webLink = `https://www.bible.com/bible/111/${encodeURIComponent(abbr)}.${chapter}.1`;
+                youVersionLink.href = webLink;
                 // Also update the new button's link
                 const youVersionButton = document.getElementById('youversion-button');
-                if (youVersionButton) youVersionButton.href = youVersionLink.href;
+                if (youVersionButton) {
+                    youVersionButton.href = webLink;
+                    youVersionButton.setAttribute('onclick', `openYouVersionApp('${deepLink}','${webLink}')`);
+                    youVersionButton.setAttribute('data-deep-link', deepLink);
+                    youVersionButton.setAttribute('data-web-link', webLink);
+                }
                 passageTranslationSpan.textContent = passage.translation;
             }
         }
@@ -463,9 +475,18 @@
             };
 
             const abbr = bookAbbr[firstRef.book] || firstRef.book.replace(/\s/g, '').toUpperCase();
-            const link = `https://www.bible.com/bible/111/${abbr}.${firstRef.chapter}.${firstRef.verse}-${lastRef.verse}.NIV`;
+            // Deep link: youversion://bible/111/[BOOK_ABBR].[CHAPTER].[VERSE]
+            // Fallback web link: https://www.bible.com/bible/111/[BOOK_ABBR].[CHAPTER].[VERSE]-[LAST_VERSE]
+            youVersionTodayButton.dataset.deepLink = `youversion://bible/111/${abbr}.${firstRef.chapter}.${firstRef.verse}`;
+            youVersionTodayButton.dataset.webLink = `https://www.bible.com/bible/111/${abbr}.${firstRef.chapter}.${firstRef.verse}-${lastRef.verse}`;
+        }
 
-            youVersionTodayButton.href = link;
+        // --- YouVersion App Deep Link Helper ---
+        function openYouVersionApp(deepLink, webLink) {
+            const timeout = setTimeout(() => {
+                window.location.href = webLink;
+            }, 500);
+            window.location.href = deepLink;
         }
 
         // Example usage:
