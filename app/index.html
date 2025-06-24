@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#34403a">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Seed App">
@@ -253,11 +255,6 @@
                   <!-- Populated dynamically: passage title and text -->
                 </section>
                 <div class="mt-6 text-center">
-                    <a id="youversion-button" href="#" target="_blank" rel="noopener noreferrer"
-                       class="inline-block font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200"
-                       style="background-color: var(--accent-1); color: var(--primary-bg);">
-                       Read Full Passage in YouVersion
-                    </a>
                 </div>
             </section>
 
@@ -266,15 +263,7 @@
                 <h2 class="text-xl font-bold mb-4">Today's Verses</h2>
                 <div id="todays-verses-display" class="space-y-4 text-base md:text-lg leading-relaxed"></div>
                 <div class="flex justify-center mt-4">
-                    <a id="youversion-today-button"
-                       href="#"
-                       onclick="openYouVersionApp(this.dataset.deepLink, this.dataset.webLink)"
-                       data-deep-link=""
-                       data-web-link=""
-                       class="font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 text-base border border-gray-800 hover:bg-gray-800 hover:text-white"
-                       style="background-color: transparent; color: #1f2937;">
-                       Open Today in YouVersion
-                    </a>
+                    <!-- YouVersion Today button removed -->
                 </div>
                 <div class="flex justify-center mt-6">
                     <button id="mark-complete-button" class="font-bold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 text-lg hidden" style="background-color: var(--accent-1); color: var(--primary-bg);">Mark Today Complete</button>
@@ -435,58 +424,14 @@
                 const webLink = `https://www.bible.com/bible/111/${encodeURIComponent(abbr)}.${chapter}.1`;
                 youVersionLink.href = webLink;
                 // Also update the new button's link
-                const youVersionButton = document.getElementById('youversion-button');
-                if (youVersionButton) {
-                    youVersionButton.href = webLink;
-                    youVersionButton.setAttribute('onclick', `openYouVersionApp('${deepLink}','${webLink}')`);
-                    youVersionButton.setAttribute('data-deep-link', deepLink);
-                    youVersionButton.setAttribute('data-web-link', webLink);
-                }
+                // (YouVersion button logic removed)
                 passageTranslationSpan.textContent = passage.translation;
             }
         }
 
 
         // --- YouVersion Today Button Logic ---
-        // (see new updateTodayYouVersionLinkFromList below)
-
-        function updateTodayYouVersionLinkFromList() {
-            const youVersionTodayButton = document.getElementById('youversion-today-button');
-            const todayVerseEls = document.querySelectorAll('#today-verses li');
-            if (!todayVerseEls.length || !youVersionTodayButton) return;
-
-            const references = Array.from(todayVerseEls).map(el => el.textContent.trim());
-            const parseRef = ref => {
-                const match = ref.match(/^([1-3]?\s?[A-Za-z]+)\s+(\d+):(\d+)/);
-                return match ? { book: match[1].toUpperCase(), chapter: match[2], verse: match[3] } : null;
-            };
-
-            const firstRef = parseRef(references[0]);
-            const lastRef = parseRef(references[references.length - 1]);
-
-            if (!firstRef || !lastRef || firstRef.book !== lastRef.book || firstRef.chapter !== lastRef.chapter) return;
-
-            const bookAbbr = {
-                "GENESIS": "GEN", "PSALM": "PSA", "PSALMS": "PSA", "MATTHEW": "MAT",
-                "MARK": "MRK", "LUKE": "LUK", "JOHN": "JHN", "ROMANS": "ROM",
-                "1 CORINTHIANS": "1CO", "2 CORINTHIANS": "2CO", "GALATIANS": "GAL",
-                "EPHESIANS": "EPH", "PHILIPPIANS": "PHP", "JAMES": "JAS"
-            };
-
-            const abbr = bookAbbr[firstRef.book] || firstRef.book.replace(/\s/g, '').toUpperCase();
-            // Deep link: youversion://bible/111/[BOOK_ABBR].[CHAPTER].[VERSE]
-            // Fallback web link: https://www.bible.com/bible/111/[BOOK_ABBR].[CHAPTER].[VERSE]-[LAST_VERSE]
-            youVersionTodayButton.dataset.deepLink = `youversion://bible/111/${abbr}.${firstRef.chapter}.${firstRef.verse}`;
-            youVersionTodayButton.dataset.webLink = `https://www.bible.com/bible/111/${abbr}.${firstRef.chapter}.${firstRef.verse}-${lastRef.verse}`;
-        }
-
-        // --- YouVersion App Deep Link Helper ---
-        function openYouVersionApp(deepLink, webLink) {
-            const timeout = setTimeout(() => {
-                window.location.href = webLink;
-            }, 500);
-            window.location.href = deepLink;
-        }
+        // (YouVersion Today button and related logic removed)
 
         // Example usage:
         // updatePassageTitle("Matthew 5-7");
