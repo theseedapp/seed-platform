@@ -16,5 +16,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "apple-touch-icon": "https://i.imgur.com/hMPdDWB.png"
 }
