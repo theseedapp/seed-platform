@@ -14,7 +14,7 @@
     <!-- PWA and Favicon Links -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="https://i.imgur.com/g9J1Y1Q.png" type="image/png">
-    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/hMPdDWB.png">
 
     <!-- Tailwind CSS & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -298,7 +298,7 @@
             </div>
         </div>
         <div class="p-4 text-center text-xs" style="color: var(--primary-text); opacity: 0.7;">
-            <p>Created for the benefit of your soul by NewJourneyDesigns v2.3</p>
+            <p>Created for the benefit of your soul by NewJourneyDesigns <span id="app-version" style="font-variant-numeric: tabular-nums;"></span></p>
         </div>
     </div>
 
@@ -365,9 +365,25 @@
     <footer style="font-size: 0.8rem; margin-top: 2rem; text-align: center; padding: 1rem; color: var(--primary-text); opacity: 0.6;">
         <p>Scripture quotations taken from the Holy Bible, New International Version®, NIV®.</p>
         <p>Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.</p>
+        <div>
+            <span id="footer-app-version"></span>
+        </div>
    </footer>
     
     <script type="module">
+        // === App Version Constant ===
+        const APP_VERSION = "2.3.0";
+
+        // Insert version into menu and footer
+        document.addEventListener('DOMContentLoaded', () => {
+            // Side menu version
+            const menuVer = document.getElementById('app-version');
+            if (menuVer) menuVer.textContent = `v${APP_VERSION}`;
+            // Footer version
+            const footerVer = document.getElementById('footer-app-version');
+            if (footerVer) footerVer.textContent = `Seed App Version: v${APP_VERSION}`;
+        });
+
         // Register Service Worker for PWA functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
